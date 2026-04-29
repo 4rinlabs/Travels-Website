@@ -4,6 +4,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 First, run the development server:
 
+supabase password:
+eazyfly@123
+
 ```bash
 npm run dev
 # or
