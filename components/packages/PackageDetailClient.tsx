@@ -31,15 +31,13 @@ export default function PackageDetailClient({ pkg }: Props) {
   const images = useMemo(() => {
     const arr = [
       safeImage(pkg.image),
-      ...((pkg.gallery || []).map((img) => safeImage(img))),
+      ...(pkg.gallery || []).map((img) => safeImage(img)),
     ].filter(Boolean);
 
     return [...new Set(arr)];
   }, [pkg]);
 
-  const whatsapp = encodeURIComponent(
-    `Hi, I want details about ${pkg.title}`
-  );
+  const whatsapp = encodeURIComponent(`Hi, I want details about ${pkg.title}`);
 
   function openGallery(i: number) {
     setIndex(i);
@@ -47,20 +45,15 @@ export default function PackageDetailClient({ pkg }: Props) {
   }
 
   function nextImage() {
-    setIndex((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1
-    );
+    setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   }
 
   function prevImage() {
-    setIndex((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   }
 
   return (
     <main className="bg-[#f8fafc] min-h-screen">
-
       {/* HERO */}
       <section className="relative h-[78vh] min-h-[620px] overflow-hidden">
         <Image
@@ -76,7 +69,6 @@ export default function PackageDetailClient({ pkg }: Props) {
 
         <div className="relative z-10 max-w-7xl mx-auto h-full px-6 flex items-end pb-14">
           <div className="grid lg:grid-cols-[1fr_380px] gap-10 w-full items-end">
-
             {/* LEFT HERO CONTENT */}
             <div className="text-white max-w-3xl">
               <p className="uppercase tracking-[4px] text-sm text-white/60 font-semibold">
@@ -132,16 +124,16 @@ export default function PackageDetailClient({ pkg }: Props) {
               )}
 
               <p className="text-slate-600 mt-3 leading-relaxed text-sm">
-                Handpicked stays, smooth transfers and expert support for a stress-free journey.
+                Handpicked stays, smooth transfers and expert support for a
+                stress-free journey.
               </p>
 
               <Link
-                href={`https://wa.me/919995410097?text=${whatsapp}`}
+                href={`https://wa.me/919539430097?text=${whatsapp}`}
                 target="_blank"
                 className="block mt-7 text-center py-3.5 rounded-full text-white text-sm font-semibold shadow-md shadow-blue-500/20"
                 style={{
-                  background:
-                    "linear-gradient(135deg,#00297A,#2B67FF,#05A7FF)",
+                  background: "linear-gradient(135deg,#00297A,#2B67FF,#05A7FF)",
                 }}
               >
                 WhatsApp Enquiry
@@ -154,7 +146,6 @@ export default function PackageDetailClient({ pkg }: Props) {
                 Request Callback
               </Link>
             </div>
-
           </div>
         </div>
       </section>
@@ -179,7 +170,6 @@ export default function PackageDetailClient({ pkg }: Props) {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px]">
-
             {images.slice(1).map((img, i) => (
               <button
                 key={i}
@@ -198,7 +188,6 @@ export default function PackageDetailClient({ pkg }: Props) {
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-colors duration-300" />
               </button>
             ))}
-
           </div>
         </section>
       )}
@@ -206,10 +195,8 @@ export default function PackageDetailClient({ pkg }: Props) {
       {/* DETAILS */}
       <section className="max-w-7xl mx-auto px-6 pb-24">
         <div className="grid lg:grid-cols-[1fr_360px] gap-10">
-
           {/* LEFT CONTENT */}
           <div className="space-y-8">
-
             {/* ITINERARY */}
             {!!pkg.itinerary?.length && (
               <div className="bg-white rounded-[var(--radius-card)] p-8 md:p-10 shadow-[var(--card-shadow)]">
@@ -248,7 +235,6 @@ export default function PackageDetailClient({ pkg }: Props) {
 
             {/* INCLUDED / EXCLUDED */}
             <div className="grid md:grid-cols-2 gap-6">
-
               {!!pkg.inclusions?.length && (
                 <div className="bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow)] border border-emerald-100">
                   <h3 className="text-xl font-bold text-emerald-600 mb-5">
@@ -257,7 +243,10 @@ export default function PackageDetailClient({ pkg }: Props) {
 
                   <ul className="space-y-3">
                     {pkg.inclusions.map((item, i) => (
-                      <li key={i} className="text-slate-700 text-sm leading-relaxed flex gap-2">
+                      <li
+                        key={i}
+                        className="text-slate-700 text-sm leading-relaxed flex gap-2"
+                      >
                         <span className="text-emerald-500 shrink-0">✓</span>
                         {item}
                       </li>
@@ -274,7 +263,10 @@ export default function PackageDetailClient({ pkg }: Props) {
 
                   <ul className="space-y-3">
                     {pkg.exclusions.map((item, i) => (
-                      <li key={i} className="text-slate-700 text-sm leading-relaxed flex gap-2">
+                      <li
+                        key={i}
+                        className="text-slate-700 text-sm leading-relaxed flex gap-2"
+                      >
                         <span className="text-red-400 shrink-0">✕</span>
                         {item}
                       </li>
@@ -282,29 +274,25 @@ export default function PackageDetailClient({ pkg }: Props) {
                   </ul>
                 </div>
               )}
-
             </div>
-
           </div>
 
           {/* RIGHT STICKY CARD */}
           <aside className="h-fit sticky top-24">
             <div className="bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow-hover)]">
-              <h3 className="text-2xl font-bold text-[#00297A]">
-                Need Help?
-              </h3>
+              <h3 className="text-2xl font-bold text-[#00297A]">Need Help?</h3>
 
               <p className="text-slate-600 mt-3 leading-relaxed text-sm">
-                Speak with our travel experts for best pricing, visa support and custom itineraries.
+                Speak with our travel experts for best pricing, visa support and
+                custom itineraries.
               </p>
 
               <Link
-                href={`https://wa.me/919995410097?text=${whatsapp}`}
+                href={`https://wa.me/919539430097?text=${whatsapp}`}
                 target="_blank"
                 className="block mt-7 text-center py-3.5 rounded-full text-white text-sm font-semibold shadow-md shadow-blue-500/20"
                 style={{
-                  background:
-                    "linear-gradient(135deg,#00297A,#2B67FF,#05A7FF)",
+                  background: "linear-gradient(135deg,#00297A,#2B67FF,#05A7FF)",
                 }}
               >
                 Chat on WhatsApp
@@ -318,14 +306,12 @@ export default function PackageDetailClient({ pkg }: Props) {
               </Link>
             </div>
           </aside>
-
         </div>
       </section>
 
       {/* LIGHTBOX */}
       {open && (
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center px-4">
-
           <button
             onClick={() => setOpen(false)}
             className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
@@ -361,7 +347,6 @@ export default function PackageDetailClient({ pkg }: Props) {
           </div>
         </div>
       )}
-
     </main>
   );
 }

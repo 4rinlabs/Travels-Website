@@ -24,9 +24,7 @@ export default function VisaCard({
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-bold text-[#00297A]">
-          {title}
-        </h3>
+        <h3 className="text-xl font-bold text-[#00297A]">{title}</h3>
 
         <div className="mt-5 flex gap-3">
           <Link
@@ -38,7 +36,7 @@ export default function VisaCard({
           </Link>
 
           <a
-            href={`https://wa.me/919995410097?text=I want to know more about ${title}`}
+            href={`https://wa.me/919539430097?text=I want to know more about ${title}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-5 py-2.5 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:border-slate-300 hover:bg-slate-50 transition-all duration-200"
