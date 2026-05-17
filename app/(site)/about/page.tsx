@@ -1,72 +1,116 @@
 import { Target, Eye, Award } from "lucide-react";
 
 export default function AboutPage() {
-  const cards = [
+  const values = [
     {
-      Icon: Target,
+      num: "01",
       title: "Our Mission",
-      text: "To make travel simple, affordable, and memorable.",
+      text: "To elevate travel from a simple transaction to a carefully curated experience, making every journey deeply personal and effortlessly refined.",
     },
     {
-      Icon: Eye,
+      num: "02",
       title: "Our Vision",
-      text: "To become a trusted travel partner across India and beyond.",
+      text: "To be the quiet, trusted architect behind the most memorable and seamless journeys for discerning travellers globally.",
     },
     {
-      Icon: Award,
-      title: "Why Choose Us",
-      text: "Personalized service, quick support, and best pricing.",
+      num: "03",
+      title: "Our Ethos",
+      text: "Restraint, precision, and personal attention. We believe the true luxury of travel is found in the unseen details.",
     },
   ];
 
   return (
     <>
-      {/* HERO */}
+      {/* ═══ HERO ═══ */}
       <section
-        className="py-20 text-center text-white relative overflow-hidden"
+        className="page-hero"
         style={{
-          background: "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",
+          background: "var(--ivory)",
+          padding: "12rem 0 6rem 0",
+          textAlign: "center",
         }}
       >
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
-
-        <div className="relative z-10 max-w-3xl mx-auto px-6">
-          <p className="text-sm font-semibold uppercase tracking-[4px] text-white/60 mb-4">
-            About Us
+        <div className="page-hero-inner" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 2.5rem" }}>
+          <p className="label-smallcaps" style={{ marginBottom: "2rem" }}>
+            The Company
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-5">
-            About EazyFly Travels
+          <h1
+            style={{
+              fontFamily: "var(--font-display), Georgia, serif",
+              fontSize: "clamp(3rem, 7vw, 5.5rem)",
+              fontWeight: 300,
+              color: "var(--charcoal)",
+              lineHeight: 1.1,
+              marginBottom: "3rem",
+            }}
+          >
+            A quiet approach to extraordinary travel.
           </h1>
-          <p className="text-white/75 text-lg leading-relaxed max-w-2xl mx-auto">
-            We specialize in providing seamless travel experiences through curated holiday packages,
-            flight bookings, and visa assistance.
+          <hr className="rule-gold" style={{ margin: "0 auto 3rem auto", width: "80px" }} />
+          <p
+            style={{
+              fontFamily: "var(--font-body), system-ui, sans-serif",
+              fontSize: "1.125rem",
+              fontWeight: 300,
+              color: "var(--charcoal-soft)",
+              lineHeight: 1.8,
+              maxWidth: "680px",
+              margin: "0 auto",
+            }}
+          >
+            We are not a booking engine. We are a team of passionate travellers and meticulous planners who understand that your time is your greatest luxury.
           </p>
         </div>
       </section>
 
-      {/* CARDS */}
-      <section className="max-w-5xl mx-auto px-6 py-24">
-        <div className="grid md:grid-cols-3 gap-6">
-          {cards.map((card) => {
-            const { Icon } = card;
-            return (
-              <div
-                key={card.title}
-                className="bg-white p-8 rounded-[var(--radius-card)] shadow-[var(--card-shadow)] border border-slate-100 hover:shadow-[var(--card-shadow-hover)] hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2B67FF] to-[#05A7FF] flex items-center justify-center mb-5">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-
-                <h3 className="text-lg font-bold text-[#00297A] mb-2">
-                  {card.title}
+      {/* ═══ VALUES ═══ */}
+      <section
+        className="about-values-section"
+        style={{
+          background: "var(--charcoal)",
+          padding: "8rem 0",
+        }}
+      >
+        <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 2.5rem" }}>
+          <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
+            {values.map((val) => (
+              <div key={val.num} style={{ borderTop: "1px solid rgba(5,167,255,0.3)", paddingTop: "2.5rem" }}>
+                <p
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "2.5rem",
+                    color: "var(--gold)",
+                    lineHeight: 1,
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  {val.num}
+                </p>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "2rem",
+                    fontWeight: 300,
+                    color: "var(--ivory)",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {val.title}
                 </h3>
-                <p className="text-slate-600 leading-relaxed">
-                  {card.text}
+                <p
+                  style={{
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontSize: "1rem",
+                    fontWeight: 300,
+                    color: "var(--charcoal-muted)",
+                    lineHeight: 1.8,
+                  }}
+                >
+                  {val.text}
                 </p>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </section>
     </>

@@ -1,4 +1,3 @@
-// Hero.tsx
 "use client";
 
 import Image from "next/image";
@@ -8,104 +7,261 @@ import { useEffect, useState } from "react";
 const slides = [
   {
     image: "/hero1.jpg",
-    title: "Explore The World With Confidence",
-    subtitle:
-      "Holiday Packages, Flights & Visa Services — all in one place.",
+    location: "Santorini, Greece",
+    headline: "Where the\nSea Meets\nEternity",
+    sub: "Private villas, curated itineraries, and the art of doing nothing beautifully.",
   },
   {
     image: "/hero2.jpg",
-    title: "Your Dream Vacation Starts Here",
-    subtitle:
-      "Beautiful destinations, curated packages, and hassle-free planning.",
+    location: "Maldives",
+    headline: "Still Waters,\nDeep Calm",
+    sub: "Overwater sanctuaries for those who seek silence as a luxury.",
   },
   {
     image: "/hero3.jpg",
-    title: "Travel Smarter With EazyFly Travels",
-    subtitle:
-      "From booking to boarding, we make every trip smooth and memorable.",
+    location: "Kyoto, Japan",
+    headline: "Seasons Change,\nMoments Remain",
+    sub: "Ancient temples, ryokan retreats, and the ceremony of slow travel.",
   },
 ];
 
 export default function Hero() {
   const [current, setCurrent] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    setLoaded(true);
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 5000);
-
+    }, 7000);
     return () => clearInterval(timer);
   }, []);
 
+  const slide = slides[current];
+
   return (
-    <section className="relative h-[92vh] min-h-[600px] overflow-hidden bg-slate-900 pointer-events-none">
-      {/* BACKGROUND */}
-      {slides.map((slide, index) => (
+    <section
+      style={{
+        position: "relative",
+        height: "100svh",
+        minHeight: "600px",
+        overflow: "hidden",
+        background: "var(--charcoal)",
+      }}
+    >
+      {/* BACKGROUND IMAGES with Ken Burns */}
+      {slides.map((s, i) => (
         <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            current === index ? "opacity-100 z-0" : "opacity-0 -z-10"
-          }`}
+          key={i}
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: current === i ? 1 : 0,
+            transition: "opacity 1.4s ease",
+            zIndex: current === i ? 1 : 0,
+          }}
         >
           <Image
-            src={slide.image}
-            alt={slide.title}
+            src={s.image}
+            alt={s.headline}
             fill
-            priority={index === 0}
+            priority={i === 0}
             sizes="100vw"
-            className="object-cover"
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+              animation: current === i ? "kenburns-luxury 12s ease-out forwards" : "none",
+            }}
           />
-
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70" />
+          {/* Dark vignette — heavier at bottom-left for text legibility */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(135deg, rgba(42,37,32,0.75) 0%, rgba(42,37,32,0.3) 50%, rgba(42,37,32,0.15) 100%)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(to top, rgba(42,37,32,0.6) 0%, transparent 55%)",
+            }}
+          />
         </div>
       ))}
 
-      {/* CONTENT */}
-      <div className="relative z-20 h-full flex items-center justify-center text-center px-6 pointer-events-auto">
-        <div className="max-w-4xl">
-          <p className="text-white/70 text-sm font-semibold uppercase tracking-[4px] mb-5">
-            EazyFly Travels
-          </p>
+      {/* CONTENT — lower-left, editorial asymmetric */}
+      <div
+        className="hero-content"
+        style={{
+          position: "absolute",
+          zIndex: 20,
+          bottom: "12%",
+          left: 0,
+          right: 0,
+          padding: "0 2.5rem",
+          maxWidth: "1320px",
+          margin: "0 auto",
+        }}
+      >
+        {/* Location label */}
+        <p
+          className="label-smallcaps anim-slide-right"
+          style={{
+            color: "var(--gold)",
+            marginBottom: "1.25rem",
+            opacity: loaded ? 1 : 0,
+            animationDelay: "0.2s",
+          }}
+        >
+          {slide.location}
+        </p>
 
-          <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-            {slides[current].title}
-          </h1>
+        {/* Rule */}
+        <div
+          style={{
+            width: "40px",
+            height: "1px",
+            background: "var(--gold)",
+            opacity: 0.7,
+            marginBottom: "1.5rem",
+          }}
+        />
 
-          <p className="text-white/80 text-lg md:text-xl mt-5 max-w-2xl mx-auto leading-relaxed">
-            {slides[current].subtitle}
-          </p>
+        {/* Headline */}
+        <h1
+          key={`headline-${current}`}
+          className="anim-fade-rise"
+          style={{
+            fontFamily: "var(--font-display), Georgia, serif",
+            fontSize: "clamp(3rem, 7vw, 6rem)",
+            fontWeight: 300,
+            lineHeight: 1.1,
+            color: "var(--ivory)",
+            whiteSpace: "pre-line",
+            maxWidth: "720px",
+            marginBottom: "1.75rem",
+            animationDelay: "0.3s",
+          }}
+        >
+          {slide.headline}
+        </h1>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-9">
-            <Link
-              href="/services/holiday-packages"
-              className="px-8 py-3.5 rounded-full font-semibold bg-white text-[#00297A] pointer-events-auto"
-            >
-              Explore Packages
-            </Link>
+        {/* Sub */}
+        <p
+          key={`sub-${current}`}
+          className="anim-fade-rise"
+          style={{
+            fontFamily: "var(--font-body), system-ui, sans-serif",
+            fontWeight: 300,
+            fontSize: "clamp(0.875rem, 1.5vw, 1.05rem)",
+            color: "rgba(245,240,232,0.75)",
+            maxWidth: "480px",
+            lineHeight: 1.8,
+            marginBottom: "2.5rem",
+            animationDelay: "0.5s",
+          }}
+        >
+          {slide.sub}
+        </p>
 
-            <Link
-              href="/contact"
-              className="px-8 py-3.5 rounded-full font-semibold border border-white/30 text-white pointer-events-auto"
-            >
-              Contact Us
-            </Link>
-          </div>
+        {/* CTAs */}
+        <div
+          className="anim-fade-rise hero-cta-row"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "2.5rem",
+            flexWrap: "wrap",
+            animationDelay: "0.7s",
+          }}
+        >
+          <Link href="/services/holiday-packages" className="btn-luxury btn-luxury-light">
+            Explore Journeys
+            <span style={{ fontSize: "0.9em" }}>→</span>
+          </Link>
+          <Link
+            href="/contact"
+            style={{
+              fontFamily: "var(--font-body), system-ui, sans-serif",
+              fontWeight: 300,
+              fontSize: "0.6875rem",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "rgba(245,240,232,0.6)",
+              textDecoration: "none",
+              transition: "color 0.3s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245,240,232,1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,240,232,0.6)")}
+          >
+            Speak to an Expert
+          </Link>
         </div>
       </div>
 
-      {/* INDICATORS */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2 pointer-events-auto">
-        {slides.map((_, index) => (
+      {/* SLIDE INDICATORS — right side, vertical */}
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 20,
+          right: "2.5rem",
+          top: "50%",
+          transform: "translateY(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          alignItems: "center",
+        }}
+      >
+        {slides.map((_, i) => (
           <button
-            key={index}
-            onClick={() => setCurrent(index)}
-            className={`h-[5px] rounded-full ${
-              current === index
-                ? "w-8 bg-white"
-                : "w-[5px] bg-white/40"
-            }`}
+            key={i}
+            onClick={() => setCurrent(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            style={{
+              width: "1px",
+              height: current === i ? "40px" : "16px",
+              background: current === i ? "var(--gold)" : "rgba(245,240,232,0.35)",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              transition: "height 0.4s ease, background 0.4s ease",
+            }}
           />
         ))}
+      </div>
+
+      {/* SCROLL HINT */}
+      <div
+        className="anim-fade-in"
+        style={{
+          position: "absolute",
+          zIndex: 20,
+          bottom: "2.5rem",
+          right: "2.5rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.75rem",
+          animationDelay: "1.2s",
+        }}
+      >
+        <span
+          className="label-smallcaps"
+          style={{ color: "rgba(245,240,232,0.5)", fontSize: "0.55rem" }}
+        >
+          Scroll
+        </span>
+        <div
+          style={{
+            width: "1px",
+            height: "40px",
+            background: "rgba(245,240,232,0.3)",
+          }}
+        />
       </div>
     </section>
   );

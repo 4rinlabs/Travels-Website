@@ -1,120 +1,197 @@
-import ServiceCard from "@/components/ServiceCard";
 import Link from "next/link";
-import { Globe, Plane, FileText, ArrowRight } from "lucide-react";
 
 export default function ServicesPage() {
+  const services = [
+    {
+      num: "01",
+      title: "Holiday Packages",
+      description: "Curated itineraries designed for absolute comfort and immersion.",
+      link: "/services/holiday-packages"
+    },
+    {
+      num: "02",
+      title: "Flight Bookings",
+      description: "Premium flight arrangements and itinerary management.",
+      link: "/services/flight-tickets"
+    },
+    {
+      num: "03",
+      title: "Visa Services",
+      description: "Expert assistance and quiet efficiency for your travel documentation.",
+      link: "/services/visa-services"
+    }
+  ];
+
   return (
     <>
-      {/* HERO */}
+      {/* ═══ HERO ═══ */}
       <section
-        className="py-20 text-center text-white relative overflow-hidden"
+        className="page-hero"
         style={{
-          background:
-            "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",
+          background: "var(--ivory)",
+          padding: "12rem 0 6rem 0",
+          textAlign: "center",
         }}
       >
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
-
-        <div className="relative z-10">
-          <p className="text-sm font-semibold uppercase tracking-[4px] text-white/60 mb-4">
-            What We Do
+        <div className="page-hero-inner" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 2.5rem" }}>
+          <p className="label-smallcaps" style={{ marginBottom: "2rem" }}>
+            Expertise
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Our Travel Services
+          <h1
+            style={{
+              fontFamily: "var(--font-display), Georgia, serif",
+              fontSize: "clamp(3rem, 7vw, 5.5rem)",
+              fontWeight: 300,
+              color: "var(--charcoal)",
+              lineHeight: 1.1,
+              marginBottom: "3rem",
+            }}
+          >
+            A holistic approach to travel.
           </h1>
-          <p className="text-lg max-w-2xl mx-auto text-white/75">
-            We provide complete travel solutions including holiday packages,
-            flight bookings, and visa assistance.
+          <hr className="rule-gold" style={{ margin: "0 auto 3rem auto", width: "80px" }} />
+          <p
+            style={{
+              fontFamily: "var(--font-body), system-ui, sans-serif",
+              fontSize: "1.125rem",
+              fontWeight: 300,
+              color: "var(--charcoal-soft)",
+              lineHeight: 1.8,
+              maxWidth: "680px",
+              margin: "0 auto",
+            }}
+          >
+            We curate the world&apos;s most exceptional experiences, meticulously managed from departure to return.
           </p>
         </div>
       </section>
 
-      {/* SERVICES GRID */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
-        <div className="text-center mb-14">
-          <p className="section-label justify-center">Services</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#00297A] mt-4">
-            What We Offer
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          <ServiceCard
-            title="Holiday Packages"
-            description="Customized travel packages for families, couples, and groups with the best destinations."
-            link="/services/holiday-packages"
-            Icon={Globe}
-          />
-
-          <ServiceCard
-            title="Flight Tickets"
-            description="Book affordable domestic and international flights with the best deals available."
-            link="/services/flight-tickets"
-            Icon={Plane}
-          />
-
-          <ServiceCard
-            title="Visa Services"
-            description="Get fast and hassle-free visa assistance for your international travel needs."
-            link="/services/visa-services"
-            Icon={FileText}
-          />
-        </div>
-      </section>
-
-      {/* WHY CHOOSE US */}
-      <section className="bg-[#f8fafc] py-24">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="section-label justify-center">Why Us</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#00297A] mt-4">
-              Why Choose EazyFly Travels?
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { title: "Affordable Pricing", text: "We offer the best travel packages at competitive prices." },
-              { title: "Trusted Support", text: "Our team provides full support before, during, and after your trip." },
-              { title: "Easy Booking", text: "Quick and simple booking through WhatsApp and direct contact." },
-            ].map((item) => (
-              <div key={item.title} className="bg-white p-7 rounded-[var(--radius-card)] shadow-[var(--card-shadow)] border border-slate-100">
-                <h3 className="font-bold text-[#00297A] mb-2">{item.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  {item.text}
+      {/* ═══ SERVICES ═══ */}
+      <section
+        className="services-cards-section"
+        style={{
+          background: "var(--charcoal)",
+          padding: "8rem 0",
+        }}
+      >
+        <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 2.5rem" }}>
+          <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
+            {services.map((svc) => (
+              <div key={svc.num} style={{ borderTop: "1px solid rgba(5,167,255,0.3)", paddingTop: "2.5rem", display: "flex", flexDirection: "column" }}>
+                <p
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "2.5rem",
+                    color: "var(--gold)",
+                    lineHeight: 1,
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  {svc.num}
                 </p>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "2rem",
+                    fontWeight: 300,
+                    color: "var(--ivory)",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {svc.title}
+                </h3>
+                <p
+                  style={{
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontSize: "1rem",
+                    fontWeight: 300,
+                    color: "var(--charcoal-muted)",
+                    lineHeight: 1.8,
+                    marginBottom: "2.5rem",
+                    flexGrow: 1,
+                  }}
+                >
+                  {svc.description}
+                </p>
+                <Link
+                  href={svc.link}
+                  style={{
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontSize: "0.6875rem",
+                    fontWeight: 300,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--gold)",
+                    textDecoration: "none",
+                    borderBottom: "1px solid var(--gold)",
+                    paddingBottom: "0.25rem",
+                    alignSelf: "flex-start",
+                  }}
+                  className="hover:text-[var(--ivory)] hover:border-[var(--ivory)] transition-colors"
+                >
+                  Discover
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ═══ WHY US ═══ */}
       <section
-        className="py-20 text-center text-white relative overflow-hidden"
+        className="services-why-section"
         style={{
-          background:
-            "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",
+          background: "var(--ivory)",
+          padding: "8rem 0",
         }}
       >
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
+        <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 2.5rem" }}>
+          <div style={{ textAlign: "center", marginBottom: "5rem" }}>
+            <p className="label-smallcaps" style={{ marginBottom: "1rem" }}>The Standard</p>
+            <h2
+              style={{
+                fontFamily: "var(--font-display), Georgia, serif",
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                fontWeight: 300,
+                color: "var(--charcoal)",
+              }}
+            >
+              The EazyFly Difference
+            </h2>
+          </div>
 
-        <div className="relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Plan Your Dream Trip Today
-          </h2>
-
-          <p className="mb-9 text-lg text-white/75">
-            Contact us now and get the best travel deals tailored for you.
-          </p>
-
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 bg-white px-8 py-3.5 rounded-full font-semibold text-[#00297A] shadow-xl shadow-black/10 hover:shadow-2xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-          >
-            Contact Us
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="grid md:grid-cols-3 gap-12 text-center">
+            {[
+              { title: "Uncompromising Quality", text: "Every partner, property, and route is vetted against rigorous standards." },
+              { title: "Absolute Discretion", text: "Your privacy and peace of mind remain our foremost priority throughout your journey." },
+              { title: "Effortless Process", text: "A seamless, white-glove approach from the first consultation to the final arrival." },
+            ].map((item, idx) => (
+              <div key={idx}>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "1.75rem",
+                    fontWeight: 300,
+                    color: "var(--charcoal)",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  style={{
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontSize: "1rem",
+                    fontWeight: 300,
+                    color: "var(--charcoal-soft)",
+                    lineHeight: 1.8,
+                  }}
+                >
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </>

@@ -1,111 +1,185 @@
-import { Star, ExternalLink, Quote } from "lucide-react";
-import Link from "next/link";
+import { Star, ExternalLink } from "lucide-react";
 
-const reviews = [
+const testimonials = [
   {
-    name: "Ameen",
+    name: "Ameen K.",
+    origin: "Kerala, India",
     review:
-      "Very smooth and professional service. Booking process was easy and support was excellent throughout.",
+      "Seamless from the very first enquiry to the moment we landed back home. EazyFly curated every detail with a quiet, assured elegance.",
     rating: 5,
   },
   {
-    name: "Fathima",
+    name: "Fathima R.",
+    origin: "Kasaragod",
     review:
-      "Had a great experience with EazyFly Travels. Friendly service and quick response for my travel needs.",
+      "There is a certain kind of travel company that makes you feel looked after without ever feeling managed. This is one of them.",
     rating: 5,
   },
   {
-    name: "Shabeer",
+    name: "Shabeer M.",
+    origin: "Mangalore",
     review:
-      "Highly recommended for flight bookings and travel support. Everything was handled without hassle.",
+      "Flight bookings, hotel confirmations, visa paperwork — not a single stone left unturned. I simply arrived, and the rest unfolded.",
     rating: 5,
   },
 ];
 
 export default function GoogleReviewsSection() {
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-
-        {/* HEADING */}
-        <div className="text-center mb-16">
-          <p className="section-label justify-center">
-            Google Reviews
-          </p>
-
-          <h2 className="text-3xl md:text-4xl font-bold text-[#00297A] mt-4">
-            Trusted by Our Customers
-          </h2>
-
-          <p className="text-slate-500 mt-4 max-w-2xl mx-auto">
-            Real customer experiences that reflect the quality and trust behind
-            EazyFly Travels.
-          </p>
-        </div>
-
-        {/* RATING SUMMARY */}
-        <div className="bg-[#f8fafc] rounded-[var(--radius-card)] p-8 md:p-10 border border-slate-100 mb-14 flex flex-col md:flex-row items-center justify-between gap-8">
+    <section
+      style={{
+        padding: "7rem 0",
+        background: "var(--ivory-warm)",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1320px",
+          margin: "0 auto",
+          padding: "0 2.5rem",
+        }}
+      >
+        {/* Section header */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "2rem",
+            marginBottom: "5rem",
+          }}
+        >
           <div>
-            <p className="text-sm text-slate-500 mb-2">Google Rating</p>
-            <div className="flex items-center gap-3">
-              <h3 className="text-5xl font-bold text-[#00297A]">5.0</h3>
-
-              <div>
-                <div className="flex items-center gap-0.5 text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-slate-500 text-sm mt-1">Based on 17 reviews</p>
-              </div>
-            </div>
+            <p className="label-smallcaps" style={{ marginBottom: "1rem" }}>
+              Guest Voices
+            </p>
+            <h2
+              style={{
+                fontFamily: "var(--font-display), Georgia, serif",
+                fontSize: "clamp(2rem, 4vw, 3.25rem)",
+                fontWeight: 300,
+                color: "var(--charcoal)",
+                lineHeight: 1.2,
+                maxWidth: "440px",
+              }}
+            >
+              Words from those who have travelled with us
+            </h2>
           </div>
 
-          <a
-            href="https://www.google.com/search?q=EazyFly+Travels+Kasaragod"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+          {/* Rating badge */}
+          <div
             style={{
-              background: "linear-gradient(135deg, #2B67FF, #05A7FF)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: "0.5rem",
             }}
           >
-            View on Google
-            <ExternalLink className="w-4 h-4" />
-          </a>
+            <p
+              style={{
+                fontFamily: "var(--font-display), Georgia, serif",
+                fontSize: "3.5rem",
+                fontWeight: 300,
+                color: "var(--charcoal)",
+                lineHeight: 1,
+              }}
+            >
+              5.0
+            </p>
+            <div style={{ display: "flex", gap: "3px" }}>
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  style={{ width: "14px", height: "14px", fill: "var(--gold)", color: "var(--gold)" }}
+                />
+              ))}
+            </div>
+            <p
+              className="label-smallcaps"
+              style={{ fontSize: "0.55rem", color: "var(--charcoal-muted)" }}
+            >
+              Google · 17 Reviews
+            </p>
+            <a
+              href="https://www.google.com/search?q=EazyFly+Travels+Kasaragod"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-luxury"
+              style={{ marginTop: "0.75rem" }}
+            >
+              View on Google
+              <ExternalLink style={{ width: "10px", height: "10px" }} />
+            </a>
+          </div>
         </div>
 
-        {/* REVIEW CARDS */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {reviews.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow)] border border-slate-100 hover:shadow-[var(--card-shadow-hover)] hover:-translate-y-1 transition-all duration-300"
+        <hr className="rule-charcoal" style={{ marginBottom: "4rem" }} />
+
+        {/* Pull-quote testimonials */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "3rem",
+          }}
+        >
+          {testimonials.map((item, i) => (
+            <figure
+              key={i}
+              style={{
+                margin: 0,
+                paddingTop: "2rem",
+                borderTop: "1px solid rgba(184,154,90,0.3)",
+              }}
             >
-              <Quote className="w-8 h-8 text-[#05A7FF]/20 mb-3" />
-
-              <div className="flex items-center gap-0.5 text-amber-400 mb-4">
-                {[...Array(item.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400" />
-                ))}
-              </div>
-
-              <p className="text-slate-600 leading-relaxed mb-6">
-                &ldquo;{item.review}&rdquo;
+              {/* Opening mark */}
+              <p
+                style={{
+                  fontFamily: "var(--font-display), Georgia, serif",
+                  fontSize: "5rem",
+                  fontWeight: 300,
+                  color: "var(--gold-pale)",
+                  lineHeight: 0.5,
+                  marginBottom: "1.5rem",
+                  userSelect: "none",
+                }}
+                aria-hidden
+              >
+                &ldquo;
               </p>
 
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2B67FF] to-[#05A7FF] flex items-center justify-center text-white font-bold text-sm">
-                  {item.name[0]}
-                </div>
-                <div>
-                  <h4 className="font-semibold text-[#00297A]">{item.name}</h4>
-                  <p className="text-xs text-slate-400">
-                    Verified Google Review
-                  </p>
-                </div>
-              </div>
-            </div>
+              {/* The quote */}
+              <blockquote
+                className="pull-quote"
+                style={{
+                  margin: 0,
+                  fontSize: "clamp(1.1rem, 2vw, 1.35rem)",
+                  color: "var(--charcoal)",
+                  marginBottom: "2rem",
+                }}
+              >
+                {item.review}
+              </blockquote>
+
+              {/* Attribution */}
+              <figcaption>
+                <p
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "1rem",
+                    fontWeight: 500,
+                    color: "var(--charcoal)",
+                  }}
+                >
+                  {item.name}
+                </p>
+                <p className="label-smallcaps" style={{ fontSize: "0.55rem", color: "var(--charcoal-muted)", marginTop: "0.25rem" }}>
+                  {item.origin}
+                </p>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>

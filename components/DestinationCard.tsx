@@ -1,39 +1,122 @@
 import { safeImage } from "@/lib/safeImage";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 
 type Props = {
   title: string;
   image: string;
+  /** Optional: short excerpt/tagline for the card */
+  tagline?: string;
+  /** Variant controls aspect ratio in the editorial grid */
+  variant?: "tall" | "wide" | "square";
 };
 
-export default function DestinationCard({ title, image }: Props) {
+export default function DestinationCard({
+  title,
+  image,
+  tagline,
+  variant = "tall",
+}: Props) {
   const finalImage = safeImage(image);
 
   return (
-    <div className="group relative bg-white rounded-[var(--radius-card)] overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] hover:-translate-y-1 transition-all duration-300">
-      {/* IMAGE */}
-      <div className="relative h-72 overflow-hidden">
-        <Image
-          src={finalImage}
-          alt={title}
-          fill
-          sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-        />
+    <article
+      className="card-editorial"
+      style={{
+        height: "100%",
+        width: "100%",
+        minHeight: "320px",
+        borderRadius: "4px",
+        background: "var(--charcoal-deep)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <Image
+        src={finalImage}
+        alt={title}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        style={{ 
+          objectFit: "cover", 
+          objectPosition: "center",
+          transition: "transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)"
+        }}
+        className="card-image"
+      />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+      {/* Gradient overlay - more sophisticated multi-stop */}
+      <div 
+        className="card-overlay" 
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to top, rgba(0, 41, 122, 0.8) 0%, rgba(0, 41, 122, 0.2) 40%, transparent 100%)",
+          zIndex: 1,
+        }}
+      />
 
-        <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
-          <h3 className="text-white text-2xl font-bold leading-tight">
-            {title}
-          </h3>
+      {/* Always-visible: bottom label */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 2,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          padding: "2.5rem 2rem",
+        }}
+      >
+        {/* Location label */}
+        <p
+          className="label-smallcaps"
+          style={{ color: "var(--gold)", marginBottom: "0.75rem", opacity: 0.9 }}
+        >
+          Curated Destination
+        </p>
 
-          <span className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-md text-white group-hover:bg-white group-hover:text-[#2B67FF] transition-all duration-300">
-            <ArrowRight className="w-5 h-5" />
+        {/* Title */}
+        <h3
+          style={{
+            fontFamily: "var(--font-display), Georgia, serif",
+            fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+            fontWeight: 300,
+            color: "var(--white)",
+            lineHeight: 1.1,
+            marginBottom: tagline ? "1rem" : 0,
+            textShadow: "0 2px 10px rgba(0,0,0,0.2)"
+          }}
+        >
+          {title}
+        </h3>
+
+        {/* Content revealed on hover */}
+        <div className="card-reveal" style={{ display: "flex", flexDirection: "column" }}>
+          {tagline && (
+            <p
+              style={{
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "0.9rem",
+                color: "rgba(255,255,255,0.8)",
+                lineHeight: 1.6,
+                marginBottom: "1.5rem",
+                maxWidth: "90%"
+              }}
+            >
+              {tagline}
+            </p>
+          )}
+
+          {/* Reveal CTA */}
+          <span
+            className="btn-luxury btn-luxury-light"
+            style={{ width: "fit-content", borderBottom: "1px solid var(--gold)" }}
+          >
+            Explore Experience <span>→</span>
           </span>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

@@ -3,115 +3,172 @@
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
-import { ArrowRight } from "lucide-react";
+import { visas as mockVisas } from "@/data/visas";
 
 export default async function VisaServicesPage() {
-  const { data: visas, error } = await supabase
+  let { data: visas, error } = await supabase
     .from("visa_services")
     .select("*")
     .order("created_at", { ascending: false });
 
+  if (!visas || visas.length === 0) {
+    visas = mockVisas as any;
+  }
+
   return (
-    <main className="bg-[#f8fafc] min-h-screen">
-
-      {/* HERO */}
-      <section className="relative overflow-hidden py-20 px-6">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#00297A] via-[#2B67FF] to-[#05A7FF]" />
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
-
-        <div className="relative max-w-7xl mx-auto text-white">
-          <p className="uppercase tracking-[4px] text-sm font-semibold text-white/60">
-            EazyFly Travels
+    <>
+      {/* ═══ HERO ═══ */}
+      <section
+        className="page-hero"
+        style={{
+          background: "var(--charcoal)",
+          padding: "12rem 0 6rem 0",
+          textAlign: "center",
+          color: "var(--ivory)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div className="page-hero-inner" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 2.5rem", position: "relative", zIndex: 1 }}>
+          <p className="label-smallcaps" style={{ color: "var(--gold)", marginBottom: "2rem" }}>
+            Visas
           </p>
-
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-4">
-            Visa Services
+          <h1
+            style={{
+              fontFamily: "var(--font-display), Georgia, serif",
+              fontSize: "clamp(3rem, 7vw, 5.5rem)",
+              fontWeight: 300,
+              lineHeight: 1.1,
+              marginBottom: "3rem",
+            }}
+          >
+            Borders made seamless.
           </h1>
-
-          <p className="max-w-2xl mt-5 text-lg text-white/75 leading-relaxed">
-            Fast, reliable and expert visa assistance for your international travel.
-            We simplify documentation, submission and approvals.
+          <hr style={{ border: "none", borderTop: "1px solid rgba(5,167,255,0.5)", margin: "0 auto 3rem auto", width: "80px" }} />
+          <p
+            style={{
+              fontFamily: "var(--font-body), system-ui, sans-serif",
+              fontSize: "1.125rem",
+              fontWeight: 300,
+              color: "var(--charcoal-muted)",
+              lineHeight: 1.8,
+              maxWidth: "500px",
+              margin: "0 auto",
+            }}
+          >
+            Expert assistance and quiet efficiency for your international travel documentation. We handle the intricacies, you anticipate the journey.
           </p>
         </div>
       </section>
 
-      {/* CONTENT */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
+      {/* ═══ CONTENT ═══ */}
+      <section
+        className="visa-listing-section"
+        style={{
+          background: "var(--ivory)",
+          padding: "8rem 0",
+        }}
+      >
+        <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "0 2.5rem" }}>
+          
+          {error && (
+            <div style={{ color: "red", marginBottom: "2rem" }}>
+              Failed to load visa services.
+            </div>
+          )}
 
-        {/* Error */}
-        {error && (
-          <div className="bg-red-50 text-red-600 rounded-2xl p-5 mb-10 text-sm">
-            Failed to load visa services.
-          </div>
-        )}
-
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          {visas?.map((visa) => (
-            <Link
-              key={visa.id}
-              href={`/services/visa-services/${visa.slug}`}
-              className="group bg-white rounded-[var(--radius-card)] overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] hover:-translate-y-1 transition-all duration-300"
-            >
-              {/* Image */}
-              <div className="relative h-56 overflow-hidden">
-                <Image
-                  src={visa.image || "/visa/default.jpg"}
-                  alt={visa.country}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-
-                <div className="absolute bottom-4 left-4">
-                  <span className="bg-white/90 backdrop-blur-sm text-[#00297A] px-4 py-1.5 rounded-full text-xs font-semibold">
-                    {visa.country} Visa
-                  </span>
+          <div
+            className="visa-listing-grid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: "4rem 2rem",
+            }}
+          >
+            {visas?.map((visa) => (
+              <Link
+                key={visa.id}
+                href={`/services/visa-services/${visa.slug}`}
+                className="group"
+                style={{ textDecoration: "none", display: "block" }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    aspectRatio: "3/4",
+                    overflow: "hidden",
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  <Image
+                    src={visa.image || "/visa/default.jpg"}
+                    alt={visa.country}
+                    fill
+                    className="group-hover:scale-105 transition-transform duration-700 ease-out"
+                    style={{ objectFit: "cover" }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%)",
+                    }}
+                  />
                 </div>
-              </div>
 
-              {/* Details */}
-              <div className="p-6">
-
-                <h2 className="text-xl font-bold text-[#00297A] group-hover:text-[#2B67FF] transition-colors duration-200">
+                <h2
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "2rem",
+                    fontWeight: 300,
+                    color: "var(--charcoal)",
+                    marginBottom: "0.5rem",
+                  }}
+                >
                   {visa.country}
                 </h2>
+                
+                <p
+                  style={{
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontSize: "0.875rem",
+                    fontWeight: 300,
+                    color: "var(--charcoal-soft)",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  Processing: {visa.processing_time || "Enquire"}<br/>
+                  Validity: {visa.validity || "Varies"}
+                </p>
 
-                <div className="mt-4 space-y-2 text-sm text-slate-600">
-                  <p>
-                    <span className="font-semibold text-slate-700">
-                      Processing:
-                    </span>{" "}
-                    {visa.processing_time || "Contact us"}
-                  </p>
-
-                  <p>
-                    <span className="font-semibold text-slate-700">
-                      Validity:
-                    </span>{" "}
-                    {visa.validity || "Contact us"}
-                  </p>
+                <div
+                  style={{
+                    marginTop: "1.5rem",
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontSize: "0.6875rem",
+                    fontWeight: 300,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--charcoal-muted)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <span className="group-hover:text-black transition-colors">View Requirements</span>
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </div>
-
-                <span className="inline-flex items-center gap-1.5 text-[#05A7FF] font-semibold text-sm mt-5 group-hover:gap-2.5 transition-all duration-200">
-                  View Details
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-            </Link>
-          ))}
-
-        </div>
-
-        {/* Empty */}
-        {visas?.length === 0 && (
-          <div className="text-center py-20 text-slate-400 text-lg">
-            No visa services available right now.
+              </Link>
+            ))}
           </div>
-        )}
+
+          {visas?.length === 0 && (
+            <div style={{ textAlign: "center", padding: "4rem 0", color: "var(--charcoal-muted)", fontFamily: "var(--font-body), sans-serif", fontWeight: 300 }}>
+              No visa services available right now.
+            </div>
+          )}
+        </div>
       </section>
-    </main>
+    </>
   );
 }

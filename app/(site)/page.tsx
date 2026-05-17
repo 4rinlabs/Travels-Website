@@ -3,182 +3,362 @@
 import Hero from "@/components/Hero";
 import DestinationCard from "@/components/DestinationCard";
 import StatsSection from "@/components/StatsSection";
-import VisaCard from "@/components/VisaCard";
+import GoogleReviewsSection from "@/components/GoogleReviewsWidget";
+import HomeCTA from "@/components/HomeCTA";
 import Link from "next/link";
 import { Metadata } from "next";
-import GoogleReviewsSection from "@/components/GoogleReviewsWidget";
 import { supabase } from "@/lib/supabase";
 import { safeImage } from "@/lib/safeImage";
-import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "EazyFly Travels - Holiday Packages, Flights & Visa",
+  title: "EazyFly Travels — Curated Journeys & Private Experiences",
   description:
-    "Book holiday packages, flight tickets, and visa services with EazyFly Travels.",
+    "Holiday packages, flight tickets, and visa services for discerning travellers. Quiet luxury, meticulous planning.",
 };
 
+const howWeWork = [
+  {
+    num: "01",
+    title: "A Conversation",
+    body: "Every journey begins with listening. We take the time to understand your vision, preferences, and what truly matters to you.",
+  },
+  {
+    num: "02",
+    title: "The Curation",
+    body: "Our experts craft a bespoke itinerary — hotels, transfers, experiences — selecting only what merits your time.",
+  },
+  {
+    num: "03",
+    title: "Seamless Execution",
+    body: "From visa submissions to real-time flight updates, every detail is managed so your only task is to arrive and experience.",
+  },
+  {
+    num: "04",
+    title: "You Return",
+    body: "We believe the mark of a great journey is wanting to go again. We will be here when you are.",
+  },
+];
+
 export default async function HomePage() {
-  /* ---------------------------
-     PACKAGES
-  ---------------------------- */
   const { data: packages } = await supabase
     .from("packages")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(6);
-
-  /* ---------------------------
-     VISA SERVICES
-  ---------------------------- */
-  const { data: visas } = await supabase
-    .from("visa_services")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(6);
+    .limit(3);
 
   return (
     <>
-      {/* HERO */}
+      {/* ═══ HERO ═══ */}
       <Hero />
 
-      {/* FEATURED PACKAGES */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
-        <div className="text-center mb-14">
-          <p className="section-label justify-center">
-            Destinations
-          </p>
-
-          <h2 className="text-3xl md:text-4xl font-bold text-[#00297A] mt-4">
-            Featured Holiday Packages
-          </h2>
-
-          <p className="text-slate-500 max-w-2xl mx-auto mt-4">
-            Discover our most loved travel destinations with curated packages.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-          {packages?.map((pkg: any) => (
-            <Link
-              key={pkg.id}
-              href={`/services/holiday-packages/${pkg.slug}`}
-              className="animate-fade-in-up"
+      {/* ═══ INTRO STATEMENT ═══ */}
+      <section
+        className="home-intro-section"
+        style={{
+          background: "var(--ivory)",
+          padding: "7rem 0",
+        }}
+      >
+        <div
+          className="home-intro-grid"
+          style={{
+            maxWidth: "1320px",
+            margin: "0 auto",
+            padding: "0 2.5rem",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "4rem",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <p className="label-smallcaps" style={{ marginBottom: "1.5rem" }}>
+              Our Philosophy
+            </p>
+            <h2
+              style={{
+                fontFamily: "var(--font-display), Georgia, serif",
+                fontSize: "clamp(2rem, 4vw, 3.5rem)",
+                fontWeight: 300,
+                color: "var(--charcoal)",
+                lineHeight: 1.15,
+                marginBottom: "2rem",
+              }}
             >
-              <DestinationCard
-                title={pkg.title}
-                image={safeImage(pkg.image)}
-              />
+              Travel as it was always meant to be — unhurried, personal, and precisely right.
+            </h2>
+            <hr className="rule-gold" style={{ marginBottom: "2rem", width: "80px" }} />
+          </div>
+          <div>
+            <p
+              style={{
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "1rem",
+                color: "var(--charcoal-soft)",
+                lineHeight: 1.9,
+                marginBottom: "1.5rem",
+              }}
+            >
+              EazyFly Travels was born from a simple belief: that the right journey can change a person. We are not a booking engine. We are a team of people who have travelled, who love to travel, and who understand that every itinerary is a story waiting to be written.
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "1rem",
+                color: "var(--charcoal-soft)",
+                lineHeight: 1.9,
+                marginBottom: "2rem",
+              }}
+            >
+              From the Maldives to Mecca, from first-time flyers to frequent travellers — we bring the same quiet attentiveness to every single journey.
+            </p>
+            <Link href="/about" className="btn-luxury">
+              About the Company <span>→</span>
             </Link>
-          ))}
-        </div>
-
-        {packages?.length === 0 && (
-          <p className="text-center text-slate-400 mt-8">
-            Packages coming soon.
-          </p>
-        )}
-
-        <div className="text-center mt-12">
-          <Link
-            href="/services/holiday-packages"
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-            style={{
-              background: "linear-gradient(135deg, #2B67FF, #05A7FF)",
-            }}
-          >
-            View All Packages
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          </div>
         </div>
       </section>
 
-      {/* VISA SERVICES */}
-      <section className="bg-[#f8fafc] py-24">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* ═══ DESTINATIONS — magazine editorial grid ═══ */}
+      <section
+        className="destinations-section"
+        style={{
+          background: "var(--ivory-warm)",
+          padding: "7rem 0",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1320px",
+            margin: "0 auto",
+            padding: "0 2.5rem",
+          }}
+        >
+          {/* Section header */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "1.5rem",
+              marginBottom: "3rem",
+            }}
+          >
+            <div>
+              <p className="label-smallcaps" style={{ marginBottom: "1rem" }}>
+                Curated Destinations
+              </p>
+              <h2
+                style={{
+                  fontFamily: "var(--font-display), Georgia, serif",
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 300,
+                  color: "var(--charcoal)",
+                  lineHeight: 1.15,
+                  maxWidth: "480px",
+                }}
+              >
+                Places worth the journey
+              </h2>
+            </div>
+            <Link href="/services/holiday-packages" className="btn-luxury">
+              All Destinations <span>→</span>
+            </Link>
+          </div>
 
-          <div className="text-center mb-14">
-            <p className="section-label justify-center">
-              Travel Documents
-            </p>
+          <hr className="rule-charcoal" style={{ marginBottom: "2.5rem" }} />
 
-            <h2 className="text-3xl md:text-4xl font-bold text-[#00297A] mt-4">
-              Visa Services
-            </h2>
+          {/* Editorial asymmetric grid */}
+          {packages && packages.length > 0 ? (
+            <div
+              className="destinations-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(12, 1fr)",
+                gridAutoRows: "minmax(400px, auto)",
+                gap: "1.5rem",
+              }}
+            >
+              {packages.slice(0, 3).map((pkg: any, i: number) => {
+                // Elegant 3-column layout
+                const spans = [
+                  "span 4", 
+                  "span 4", 
+                  "span 4", 
+                ];
+                
+                // Assign a consistent premium height
+                const height = "480px";
+                const span = spans[i] || "span 4";
 
-            <p className="text-slate-500 max-w-2xl mx-auto mt-4">
-              Fast and reliable visa assistance for popular travel destinations.
+                return (
+                  <Link
+                    key={pkg.id}
+                    href={`/services/holiday-packages/${pkg.slug}`}
+                    style={{
+                      gridColumn: span,
+                      height: height,
+                      display: "block",
+                      textDecoration: "none",
+                    }}
+                  >
+                    <DestinationCard
+                      title={pkg.title}
+                      image={safeImage(pkg.image)}
+                      tagline={pkg.tagline || "Expertly curated for the discerning traveller."}
+                    />
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div
+              style={{
+                height: "320px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px solid var(--gold-pale)",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--font-display), Georgia, serif",
+                  fontStyle: "italic",
+                  fontSize: "1.25rem",
+                  color: "var(--charcoal-muted)",
+                }}
+              >
+                New destinations arriving soon.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ═══ STATS ═══ */}
+      <StatsSection />
+
+      {/* ═══ HOW WE WORK — ghost numerals ═══ */}
+      <section
+        className="how-we-work-section"
+        style={{
+          background: "var(--ivory)",
+          padding: "7rem 0",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1320px",
+            margin: "0 auto",
+            padding: "0 2.5rem",
+          }}
+        >
+          <div
+            className="how-we-work-header"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 2fr",
+              gap: "4rem",
+              alignItems: "start",
+              marginBottom: "5rem",
+            }}
+          >
+            <div>
+              <p className="label-smallcaps" style={{ marginBottom: "1rem" }}>
+                How We Work
+              </p>
+              <h2
+                style={{
+                  fontFamily: "var(--font-display), Georgia, serif",
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 300,
+                  color: "var(--charcoal)",
+                  lineHeight: 1.15,
+                }}
+              >
+                Four steps to an extraordinary journey
+              </h2>
+            </div>
+            <p
+              style={{
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "1rem",
+                color: "var(--charcoal-soft)",
+                lineHeight: 1.9,
+                paddingTop: "2.5rem",
+              }}
+            >
+              We believe exceptional travel is the result of exceptional preparation. Every detail, from the angle of your room view to the timing of your transfer, has been considered with care.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-            {visas?.map((visa: any) => (
-              <div key={visa.id} className="animate-fade-in-up">
-                <VisaCard
-                  title={`${visa.country} Visa`}
-                  image={safeImage(visa.image)}
-                  slug={visa.slug}
-                />
+          <hr className="rule-charcoal" style={{ marginBottom: "0" }} />
+
+          {/* Steps */}
+          <div>
+            {howWeWork.map((step, i) => (
+              <div
+                key={i}
+                className="how-we-work-step"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "200px 1fr 1fr",
+                  gap: "3rem",
+                  alignItems: "center",
+                  padding: "3rem 0",
+                  borderBottom: "1px solid rgba(42,37,32,0.08)",
+                  position: "relative",
+                }}
+              >
+                {/* Ghost numeral */}
+                <div
+                  className="ghost-numeral"
+                  style={{ userSelect: "none" }}
+                >
+                  {step.num}
+                </div>
+
+                {/* Title */}
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                    fontWeight: 300,
+                    color: "var(--charcoal)",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {step.title}
+                </h3>
+
+                {/* Body */}
+                <p
+                  style={{
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontWeight: 300,
+                    fontSize: "0.9rem",
+                    color: "var(--charcoal-soft)",
+                    lineHeight: 1.8,
+                  }}
+                >
+                  {step.body}
+                </p>
               </div>
             ))}
           </div>
-
-          {visas?.length === 0 && (
-            <p className="text-center text-slate-400 mt-8">
-              Visa services coming soon.
-            </p>
-          )}
-
-          <div className="text-center mt-12">
-            <Link
-              href="/services/visa-services"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-              style={{
-                background: "linear-gradient(135deg, #2B67FF, #05A7FF)",
-              }}
-            >
-              Explore Visa Services
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
         </div>
       </section>
 
-      {/* GOOGLE REVIEWS */}
+      {/* ═══ TESTIMONIALS / PULL QUOTES ═══ */}
       <GoogleReviewsSection />
 
-      {/* STATS */}
-      <StatsSection />
-
-      {/* CTA */}
-      <section
-        className="py-20 text-center text-white relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",
-        }}
-      >
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
-
-        <div className="relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-5">
-            Ready to Plan Your Next Trip?
-          </h2>
-
-          <p className="mb-9 text-lg text-white/80 max-w-2xl mx-auto">
-            Let us help you with holiday packages, flights, and visa services.
-          </p>
-
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 bg-white px-8 py-3.5 rounded-full font-semibold text-[#00297A] shadow-xl shadow-black/10 hover:shadow-2xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-          >
-            Contact Us
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
+      {/* ═══ CTA ═══ */}
+      <HomeCTA />
     </>
   );
 }

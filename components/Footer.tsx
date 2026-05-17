@@ -1,90 +1,141 @@
+"use client";
+
 import Link from "next/link";
-import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { FaInstagram, FaFacebookF, FaYoutube } from "react-icons/fa";
 import { siteConfig } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#00297A] text-white">
-      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-        {/* COMPANY */}
-        <div>
-          <h2 className="text-xl font-bold mb-4">
+    <footer
+      style={{
+        background: "var(--charcoal)",
+        color: "var(--ivory)",
+      }}
+    >
+      {/* Main content */}
+      <div
+        style={{
+          maxWidth: "1320px",
+          margin: "0 auto",
+          padding: "5rem 2.5rem 4rem",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "3rem",
+        }}
+      >
+        {/* Brand */}
+        <div style={{ gridColumn: "span 1" }}>
+          <p
+            style={{
+              fontFamily: "var(--font-display), Georgia, serif",
+              fontSize: "1.5rem",
+              fontWeight: 300,
+              color: "var(--ivory)",
+              marginBottom: "1rem",
+            }}
+          >
             {siteConfig.companyName}
-          </h2>
-          <p className="text-blue-200/70 leading-7 text-sm mb-6">
-            Your trusted travel partner for holiday packages, flight tickets,
-            and visa services.
+          </p>
+          <div
+            style={{
+              width: "32px",
+              height: "1px",
+              background: "var(--gold)",
+              marginBottom: "1.25rem",
+            }}
+          />
+          <p
+            style={{
+              fontFamily: "var(--font-body), system-ui, sans-serif",
+              fontWeight: 300,
+              fontSize: "0.8125rem",
+              color: "var(--charcoal-muted)",
+              lineHeight: 1.8,
+              marginBottom: "1.75rem",
+              maxWidth: "240px",
+            }}
+          >
+            Crafting thoughtful journeys for discerning travellers since our founding.
           </p>
 
-          <div className="flex gap-3">
+          {/* Social icons */}
+          <div style={{ display: "flex", gap: "1.25rem" }}>
             {siteConfig.social.instagram && (
               <a
                 href={siteConfig.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
                 aria-label="Instagram"
+                style={{ color: "var(--charcoal-muted)", transition: "color 0.3s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--charcoal-muted)")}
               >
                 <FaInstagram size={16} />
               </a>
             )}
-
             {siteConfig.social.facebook && (
               <a
                 href={siteConfig.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
                 aria-label="Facebook"
+                style={{ color: "var(--charcoal-muted)", transition: "color 0.3s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--charcoal-muted)")}
               >
                 <FaFacebookF size={14} />
               </a>
             )}
-
             {siteConfig.social.youtube && (
               <a
                 href={siteConfig.social.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
                 aria-label="YouTube"
+                style={{ color: "var(--charcoal-muted)", transition: "color 0.3s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--charcoal-muted)")}
               >
                 <FaYoutube size={16} />
-              </a>
-            )}
-
-            {siteConfig.social.whatsapp && (
-              <a
-                href={siteConfig.social.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                aria-label="WhatsApp"
-              >
-                <MessageCircle className="w-4 h-4" />
               </a>
             )}
           </div>
         </div>
 
-        {/* QUICK LINKS */}
+        {/* Navigation */}
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-200/50 mb-5">
-            Quick Links
-          </h3>
-          <ul className="space-y-3">
+          <p
+            className="label-smallcaps"
+            style={{
+              color: "var(--charcoal-muted)",
+              fontSize: "0.6rem",
+              marginBottom: "1.5rem",
+            }}
+          >
+            Explore
+          </p>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.875rem" }}>
             {[
               { label: "Home", href: "/" },
-              { label: "Services", href: "/services" },
               { label: "Holiday Packages", href: "/services/holiday-packages" },
+              { label: "Flight Tickets", href: "/services/flight-tickets" },
+              { label: "Visa Services", href: "/services/visa-services" },
               { label: "About", href: "/about" },
               { label: "Contact", href: "/contact" },
             ].map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-blue-100/70 hover:text-white text-sm transition-colors duration-200"
+                  style={{
+                    fontFamily: "var(--font-body), system-ui, sans-serif",
+                    fontWeight: 300,
+                    fontSize: "0.875rem",
+                    color: "var(--charcoal-muted)",
+                    textDecoration: "none",
+                    transition: "color 0.3s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ivory)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--charcoal-muted)")}
                 >
                   {item.label}
                 </Link>
@@ -93,70 +144,91 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* SERVICES */}
+        {/* Contact */}
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-200/50 mb-5">
-            Our Services
-          </h3>
-          <ul className="space-y-3">
-            {[
-              { label: "Holiday Packages", href: "/services/holiday-packages" },
-              { label: "Flight Tickets", href: "/services/flight-tickets" },
-              { label: "Visa Services", href: "/services/visa-services" },
-            ].map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="text-blue-100/70 hover:text-white text-sm transition-colors duration-200"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* CONTACT */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-200/50 mb-5">
-            Contact Info
-          </h3>
-
-          <div className="space-y-4">
-            <div className="flex gap-3 items-start">
-              <Phone className="w-4 h-4 mt-0.5 text-blue-300/50 flex-shrink-0" />
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="text-blue-100/70 hover:text-white text-sm transition-colors"
-              >
-                {siteConfig.phone}
-              </a>
-            </div>
-
-            <div className="flex gap-3 items-start">
-              <Mail className="w-4 h-4 mt-0.5 text-blue-300/50 flex-shrink-0" />
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="text-blue-100/70 hover:text-white text-sm transition-colors"
-              >
-                {siteConfig.email}
-              </a>
-            </div>
-
-            <div className="flex gap-3 items-start">
-              <MapPin className="w-4 h-4 mt-0.5 text-blue-300/50 flex-shrink-0" />
-              <p className="text-blue-100/70 text-sm leading-6">{siteConfig.address}</p>
-            </div>
+          <p
+            className="label-smallcaps"
+            style={{
+              color: "var(--charcoal-muted)",
+              fontSize: "0.6rem",
+              marginBottom: "1.5rem",
+            }}
+          >
+            Reach Us
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <a
+              href={`tel:${siteConfig.phone}`}
+              style={{
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "0.875rem",
+                color: "var(--charcoal-muted)",
+                textDecoration: "none",
+                transition: "color 0.3s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ivory)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--charcoal-muted)")}
+            >
+              {siteConfig.phone}
+            </a>
+            <a
+              href={`mailto:${siteConfig.email}`}
+              style={{
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "0.875rem",
+                color: "var(--charcoal-muted)",
+                textDecoration: "none",
+                transition: "color 0.3s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ivory)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--charcoal-muted)")}
+            >
+              {siteConfig.email}
+            </a>
+            <p
+              style={{
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "0.8125rem",
+                color: "var(--charcoal-muted)",
+                lineHeight: 1.7,
+              }}
+            >
+              {siteConfig.address}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* BOTTOM BAR */}
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-blue-200/50">
-          <p>© 2026 {siteConfig.companyName}. All rights reserved.</p>
-          <p>Designed and Developed by 4RinLabs.</p>
-        </div>
+      {/* Bottom bar */}
+      <div
+        style={{
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          padding: "1.5rem 2.5rem",
+          maxWidth: "1320px",
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+        }}
+      >
+        <p
+          className="label-smallcaps"
+          style={{ fontSize: "0.55rem", color: "var(--charcoal-muted)" }}
+        >
+          © 2026 {siteConfig.companyName}. All rights reserved.
+        </p>
+        <p
+          className="label-smallcaps"
+          style={{ fontSize: "0.55rem", color: "var(--charcoal-muted)" }}
+        >
+          Designed by 4RinLabs
+        </p>
       </div>
     </footer>
   );
