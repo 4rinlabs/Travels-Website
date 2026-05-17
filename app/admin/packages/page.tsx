@@ -26,7 +26,7 @@ export default async function AdminPackagesPage() {
           </div>
 
           <Link
-            href="/admin/visa/new"
+            href="/admin/packages/new"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-white font-semibold shadow-md w-full md:w-auto"
             style={{
               background:

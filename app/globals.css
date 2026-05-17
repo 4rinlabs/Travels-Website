@@ -1,137 +1,501 @@
 @import "tailwindcss";
 
+/* ══════════════════════════════════════════
+   LUXURY EDITORIAL DESIGN SYSTEM - EAZYFLY BRAND
+   Palette: Cool Slate · Navy Blue · Sky Blue
+   ══════════════════════════════════════════ */
+
 :root {
-  --primary-blue: #2B67FF;
-  --accent-blue: #05A7FF;
-  --dark-blue: #00297A;
-  --white: #FFFFFF;
-  --light-bg: #f8fafc;
-  --text-dark: #0f172a;
-  --text-muted: #64748b;
-  --border-soft: #e2e8f0;
-  --card-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --card-shadow-hover: 0 20px 40px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.04);
-  --radius-card: 20px;
-  --radius-pill: 999px;
-  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --gradient-brand: linear-gradient(135deg, #00297A 0%, #2B67FF 50%, #05A7FF 100%);
-  --gradient-btn: linear-gradient(135deg, #2B67FF 0%, #05A7FF 100%);
+  /* Core palette - EAZYFLY BRAND */
+  --ivory:          #F8FAFC;
+  --ivory-warm:     #F1F5F9;
+  --ivory-deep:     #E2E8F0;
+  
+  --charcoal:       #00297A; /* EazyFly Navy */
+  --charcoal-mid:   #1A439E;
+  --charcoal-soft:  #334155; /* Slate 700 for readable text */
+  --charcoal-muted: #64748B; /* Slate 500 for muted text */
+  
+  --gold:           #05A7FF; /* EazyFly Cyan/Sky */
+  --gold-light:     #2B67FF; /* EazyFly Royal Blue */
+  --gold-pale:      #DBEAFE; /* Light Blue tint */
+  
+  --white:          #FFFFFF;
+
+  /* Typography */
+  --font-display:   var(--font-display, "Georgia", serif);
+  --font-body:      var(--font-body, "system-ui", sans-serif);
+
+  /* Spacing */
+  --section-pad: 7rem 0;
+
+  /* Transitions */
+  --ease-luxury: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-slow:   cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ——— Reset & Base ——— */
 
 html {
   scroll-behavior: smooth;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: var(--white);
-  color: var(--text-dark);
+  background-color: var(--ivory);
+  color: var(--charcoal);
+  font-family: var(--font-body), "DM Sans", system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ——— Animations ——— */
+/* ——— Typography system ——— */
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(24px); }
+.font-display {
+  font-family: var(--font-display), "Cormorant Garamond", Georgia, serif;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+p, li, span {
+  font-family: var(--font-body), "DM Sans", system-ui, sans-serif;
+}
+
+/* ——— Keyframe Animations ——— */
+
+@keyframes kenburns-luxury {
+  0%   { transform: scale(1.0) translateX(0); }
+  100% { transform: scale(1.06) translateX(-1%); }
+}
+
+@keyframes fade-rise {
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+@keyframes rule-expand {
+  from { width: 0; opacity: 0; }
+  to   { width: 100%; opacity: 1; }
 }
 
-@keyframes pulse-ring {
-  0%   { transform: scale(1);   opacity: 0.6; }
-  70%  { transform: scale(1.5); opacity: 0; }
-  100% { transform: scale(1.5); opacity: 0; }
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.4); }
 }
 
-@keyframes kenburns {
-  0%   { transform: scale(1); }
-  100% { transform: scale(1.08); }
+/* ——— Animation utility classes ——— */
+
+.anim-fade-rise {
+  animation: fade-rise 0.9s var(--ease-slow) both;
 }
 
-@keyframes dot-expand {
-  from { width: 8px; }
-  to   { width: 32px; }
+.anim-fade-in {
+  animation: fade-in 0.7s ease both;
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s var(--transition-base) both;
+.anim-slide-right {
+  animation: slide-right 0.8s var(--ease-slow) both;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease both;
-}
+/* Stagger delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
 
-.animate-slide-down {
-  animation: slideDown 0.25s ease both;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.3s ease both;
-}
-
-/* Stagger children */
-.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
-.stagger-children > *:nth-child(2) { animation-delay: 80ms; }
-.stagger-children > *:nth-child(3) { animation-delay: 160ms; }
-.stagger-children > *:nth-child(4) { animation-delay: 240ms; }
-.stagger-children > *:nth-child(5) { animation-delay: 320ms; }
-.stagger-children > *:nth-child(6) { animation-delay: 400ms; }
-
-/* Hero kenburns on the active slide */
 .kenburns-active {
-  animation: kenburns 6s ease-out forwards;
+  animation: kenburns-luxury 12s ease-out forwards;
 }
 
-/* ——— Utility overrides ——— */
+/* ——— Layout utilities ——— */
 
-/* Nicer focus ring */
-*:focus-visible {
-  outline: 2px solid var(--primary-blue);
-  outline-offset: 2px;
+.section-pad {
+  padding: var(--section-pad);
 }
 
-/* Section heading accent bar */
-.section-label {
+.container-editorial {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+/* ——— Small-caps label ——— */
+
+.label-smallcaps {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ——— Thin horizontal rule ——— */
+
+.rule-gold {
+  border: none;
+  border-top: 1px solid var(--gold);
+  opacity: 0.4;
+}
+
+.rule-charcoal {
+  border: none;
+  border-top: 1px solid var(--charcoal);
+  opacity: 0.12;
+}
+
+/* ——— Card hover overlay ——— */
+
+.card-editorial {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.card-editorial .card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(42, 37, 32, 0.92) 0%,
+    rgba(42, 37, 32, 0.4) 50%,
+    rgba(42, 37, 32, 0.05) 100%
+  );
+  transition: background 0.6s var(--ease-luxury);
+}
+
+.card-editorial:hover .card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(42, 37, 32, 0.96) 0%,
+    rgba(42, 37, 32, 0.7) 60%,
+    rgba(42, 37, 32, 0.2) 100%
+  );
+}
+
+.card-editorial .card-reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s var(--ease-slow), transform 0.5s var(--ease-slow);
+}
+
+.card-editorial:hover .card-reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-editorial img {
+  transform: scale(1);
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-editorial:hover img {
+  transform: scale(1.08);
+}
+
+/* ——— Destination Link Wrappers ——— */
+
+.destination-card-link {
+  display: block;
+  text-decoration: none;
+  height: 540px; /* Default desktop height */
+  transition: transform 0.4s var(--ease-slow);
+}
+
+.destination-card-link:hover {
+  transform: translateY(-4px);
+}
+
+.destination-card-link.height-short {
+  height: 420px;
+}
+
+/* ——— Ghost numeral ——— */
+
+.ghost-numeral {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(5rem, 10vw, 9rem);
+  font-weight: 300;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--gold-pale);
+  user-select: none;
+}
+
+/* ——— Luxury button ——— */
+
+.btn-luxury {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  gap: 0.75rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--accent-blue);
+  color: var(--charcoal);
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 2px;
+  transition: color 0.3s, border-color 0.3s;
+  text-decoration: none;
 }
 
-.section-label::before {
-  content: "";
-  display: block;
-  width: 28px;
-  height: 2px;
-  background: var(--accent-blue);
-  border-radius: 999px;
+.btn-luxury:hover {
+  color: var(--gold);
 }
 
-/* WhatsApp pulse ring */
+.btn-luxury-light {
+  color: var(--ivory);
+  border-bottom-color: var(--gold-light);
+}
+
+.btn-luxury-light:hover {
+  color: var(--gold-light);
+}
+
+/* ——— Pull quote ——— */
+
+.pull-quote {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--charcoal);
+}
+
+/* ——— WhatsApp float ——— */
+
 .whatsapp-pulse::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;
   background: #25D366;
-  animation: pulse-ring 2s ease-out infinite;
+  animation: pulse-soft 2.5s ease-in-out infinite;
   z-index: -1;
+}
+
+/* ——— Focus ——— */
+
+*:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ══════════════════════════════════════════
+   MOBILE-FIRST RESPONSIVE OVERRIDES
+   Applies at ≤767px to fix inline-style layouts
+   ══════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+
+  /* ── Container padding ── */
+  .container-editorial {
+    padding: 0 1.25rem;
+  }
+
+  /* ── Section padding ── */
+  .section-pad {
+    padding: 4rem 0;
+  }
+
+  /* ── Hero sections (page headers) ──
+     All inner page heroes use padding: "12rem 0 6rem 0"
+     which is way too tall on mobile. */
+  .page-hero {
+    padding: 8rem 0 3.5rem !important;
+  }
+  .page-hero-inner {
+    padding: 0 1.25rem !important;
+  }
+
+  /* ── Homepage intro section ──
+     Inline style forces gridTemplateColumns: "1fr 1fr"
+     We override via the grid element's forced inline style
+     by targeting it with a more specific selector. */
+  .home-intro-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    padding: 0 1.25rem !important;
+  }
+  .home-intro-section {
+    padding: 4rem 0 !important;
+  }
+
+  /* ── How We Work section ── */
+  .how-we-work-header {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    margin-bottom: 3rem !important;
+    padding: 0 1.25rem !important;
+  }
+  .how-we-work-section {
+    padding: 4rem 0 !important;
+  }
+  .how-we-work-section > div {
+    padding: 0 1.25rem !important;
+  }
+  .how-we-work-step {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+    padding: 2rem 0 !important;
+  }
+  .ghost-numeral {
+    font-size: 4rem !important;
+  }
+
+  /* ── Destinations editorial grid ── */
+  .destinations-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  .destinations-grid > a {
+    grid-column: span 1 !important;
+    height: 320px !important; /* Fixed consistent height on mobile */
+  }
+  .destinations-section {
+    padding: 4rem 0 !important;
+  }
+  .destinations-section > div {
+    padding: 0 1.25rem !important;
+  }
+
+  /* ── Stats section ── */
+  .stats-section {
+    padding: 3.5rem 0 !important;
+  }
+  .stats-section > div {
+    padding: 0 1.25rem !important;
+  }
+
+  /* ── About page values section ── */
+  .about-values-section {
+    padding: 4rem 0 !important;
+  }
+  .about-values-section > div {
+    padding: 0 1.25rem !important;
+  }
+
+  /* ── Contact page ── */
+  .contact-details-section {
+    padding: 4rem 0 !important;
+  }
+  .contact-details-section > div {
+    padding: 0 1.25rem !important;
+  }
+  /* Map: reduce height on mobile */
+  .contact-map {
+    aspect-ratio: 4/3 !important;
+    min-height: 260px;
+  }
+
+  /* ── Services page ── */
+  .services-cards-section {
+    padding: 4rem 0 !important;
+  }
+  .services-cards-section > div {
+    padding: 0 1.25rem !important;
+  }
+  .services-why-section {
+    padding: 4rem 0 !important;
+  }
+  .services-why-section > div {
+    padding: 0 1.25rem !important;
+  }
+
+  /* ── Visa services page ── */
+  .visa-listing-section {
+    padding: 4rem 0 !important;
+  }
+  .visa-listing-section > div {
+    padding: 0 1.25rem !important;
+  }
+  .visa-listing-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem 0 !important;
+  }
+
+  /* ── Holiday packages listing ── */
+  .packages-listing-section {
+    padding: 4rem 0 !important;
+  }
+  .packages-listing-section > div {
+    padding: 0 1.25rem !important;
+  }
+  .packages-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+
+  /* ── Package detail page ── */
+  .pkg-detail-section {
+    padding: 4rem 0 !important;
+  }
+  .pkg-detail-section > div {
+    padding: 0 1.25rem !important;
+  }
+  /* Sidebar: remove sticky on mobile, show below content */
+  .pkg-sidebar {
+    position: static !important;
+    padding: 2rem 1.5rem !important;
+  }
+
+  /* ── HomeCTA section ── */
+  .home-cta-section {
+    padding: 5rem 0 !important;
+  }
+  .home-cta-section > div {
+    padding: 0 1.25rem !important;
+  }
+  .home-cta-buttons {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1.5rem !important;
+  }
+
+  /* ── Hero slide CTA buttons ── */
+  .hero-cta-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1.5rem !important;
+  }
+  .hero-content {
+    padding: 0 1.25rem !important;
+  }
+
+  /* ── Footer ── */
+  footer > div:first-child {
+    padding: 3rem 1.25rem 2rem !important;
+  }
+  footer > div:last-child {
+    padding: 1.25rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
 }
