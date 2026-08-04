@@ -67,7 +67,7 @@ export default async function VisaDetailPage({ params }: Props) {
   return (
     <main className="bg-[#f8fafc] min-h-screen">
       {/* HERO */}
-      <section className="relative min-h-[100vh] lg:min-h-[72vh] flex flex-col justify-end overflow-hidden">
+      <section className="relative min-h-[100vh] lg:min-h-[72vh] flex flex-col justify-center overflow-hidden">
         <Image
           src={safeImage(visa.image)}
           alt={visa.country}
@@ -79,14 +79,10 @@ export default async function VisaDetailPage({ params }: Props) {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/15" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-        <div className="relative z-10 max-w-7xl mx-auto w-full px-6 pt-32 pb-12 lg:pb-16 mt-auto">
-          <div className="grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-10 w-full items-end">
+        <div className="relative z-10 max-w-7xl mx-auto w-full px-6 pt-28 lg:pt-32 pb-12 lg:pb-16">
+          <div className="grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-10 w-full items-center lg:items-end">
             {/* LEFT */}
             <div className="text-white max-w-3xl">
-              <p className="uppercase tracking-[4px] text-sm font-semibold text-white/60">
-                Trusted Visa Assistance
-              </p>
-
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-4">
                 {visa.country} Visa
               </h1>
@@ -137,13 +133,6 @@ export default async function VisaDetailPage({ params }: Props) {
               >
                 WhatsApp Now
               </Link>
-
-              <a
-                href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
-                className="block mt-3 text-center py-3.5 rounded-full border border-slate-200 text-sm font-semibold text-[#00297A] hover:bg-slate-50 transition-colors"
-              >
-                Request Callback
-              </a>
             </div>
           </div>
         </div>

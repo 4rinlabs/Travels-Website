@@ -43,7 +43,7 @@ export default function AirportAutocomplete({ id, name, value, onChange, placeho
       airport.name.toLowerCase().includes(searchStr) ||
       airport.country.toLowerCase().includes(searchStr)
     );
-  });
+  }).slice(0, 50);
 
   const handleSelect = (airport: typeof airports[0]) => {
     const formattedValue = `${airport.city} (${airport.code})`;

@@ -29,7 +29,7 @@ export default function FlightTicketsClient() {
     <>
       {/* HERO SECTION */}
       <section
-        className="py-20 text-white relative overflow-hidden"
+        className="pt-32 pb-10 text-white relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",
         }}
@@ -49,7 +49,7 @@ export default function FlightTicketsClient() {
       </section>
 
       {/* FORM SECTION */}
-      <section className="bg-[#f8fafc] py-20 px-6">
+      <section className="bg-[#f8fafc] pt-4 pb-20 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white p-8 md:p-10 rounded-[var(--radius-card)] shadow-[var(--card-shadow)] border border-gray-100 relative overflow-hidden">
             
