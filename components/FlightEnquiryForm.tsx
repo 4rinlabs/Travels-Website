@@ -26,7 +26,7 @@ export default function FlightEnquiryForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      const message = `Hi, I need a flight ticket.%0A %0A *From:* ${formData.from}%0A %0A *To:* ${formData.to}%0A %0A *Date:* ${formData.date}%0A %0A *Passengers:* ${formData.passengers}`;
+      const message = `Hi, I'd like to book a flight ticket.%0A %0A *From:* ${formData.from}%0A*To:* ${formData.to}%0A*Date:* ${formData.date}%0A*Passengers:* ${formData.passengers}`;
       window.open(`https://wa.me/${siteConfig.whatsappNumber}?text=${message}`, "_blank");
     }
   };

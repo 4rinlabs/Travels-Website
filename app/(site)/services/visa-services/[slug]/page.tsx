@@ -58,7 +58,7 @@ export default async function VisaDetailPage({ params }: Props) {
   if (!visa) notFound();
 
   const whatsapp = encodeURIComponent(
-    `Hi, I need ${visa.country} visa details`,
+    `Hi, I'd like to enquire on ${visa.country} visa details`,
   );
 
   const requirements = visa.requirements || [];

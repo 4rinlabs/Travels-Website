@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, Clock3, MessageCircle } from "lucide-react";
 export default function ContactPage() {
   const whatsappNumber = "+91 9539430097";
 
-  const message = "Hi, I would like to know more about your travel services";
+  const message = "Hi, I'd like to know more about your travel services";
 
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     message,
