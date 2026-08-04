@@ -7,7 +7,7 @@ export default function ServicesPage() {
     <>
       {/* HERO */}
       <section
-        className="py-20 text-center text-white relative overflow-hidden"
+        className="pt-32 pb-16 text-center text-white relative overflow-hidden"
         style={{
           background:
             "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",

@@ -16,7 +16,7 @@ export default async function VisaServicesPage() {
     <main className="bg-[#f8fafc] min-h-screen">
 
       {/* HERO */}
-      <section className="relative overflow-hidden py-20 px-6">
+      <section className="relative overflow-hidden pt-32 pb-16 px-6">
         <div className="absolute inset-0 bg-gradient-to-br from-[#00297A] via-[#2B67FF] to-[#05A7FF]" />
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
 

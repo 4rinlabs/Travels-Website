@@ -11,7 +11,7 @@ export default function AboutPage() {
   return (
     <div className="bg-gray-50 pb-24">
       {/* Hero Section */}
-      <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[400px] flex items-center justify-center overflow-hidden pt-16">
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80"
