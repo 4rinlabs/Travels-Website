@@ -88,7 +88,7 @@ export default function Hero() {
       </div>
 
       {/* Floating Quick Action Bar */}
-      <div className="absolute bottom-12 md:bottom-16 left-0 w-full z-30 px-3 md:px-4">
+      <div className="absolute bottom-32 md:bottom-16 left-0 w-full z-30 px-3 md:px-4">
         <div className="container mx-auto flex justify-center">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-0 w-full max-w-4xl backdrop-blur-xl bg-white/10 p-1.5 md:p-3 rounded-2xl md:rounded-full border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
             {quickActions.map((action, idx) => (
