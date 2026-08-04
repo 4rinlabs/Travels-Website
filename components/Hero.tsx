@@ -73,7 +73,7 @@ export default function Hero() {
         </div>
 
         {/* Headline */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-6 leading-tight animate-fade-in-up drop-shadow-2xl" style={{ animationDelay: "0.1s" }}>
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight animate-fade-in-up drop-shadow-2xl" style={{ animationDelay: "0.1s" }}>
           {slides[current].title} <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-sky-100 drop-shadow-lg">
             {slides[current].highlight}
@@ -85,25 +85,10 @@ export default function Hero() {
           {slides[current].subtitle}
         </p>
         
-        {/* CTA Buttons */}
-        <div className="flex flex-wrap gap-6 justify-center items-center animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-          <Link 
-            href="/services/holiday-packages" 
-            className="px-10 py-4 bg-white text-[var(--primary-blue)] hover:bg-gray-100 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] text-lg hover:-translate-y-1"
-          >
-            Start Exploring
-          </Link>
-          <Link 
-            href="/contact" 
-            className="px-10 py-4 bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-full font-bold transition-all text-lg hover:-translate-y-1"
-          >
-            Contact Us
-          </Link>
-        </div>
       </div>
 
       {/* Floating Quick Action Bar */}
-      <div className="absolute bottom-6 left-0 w-full z-30 px-3 md:px-4">
+      <div className="absolute bottom-12 md:bottom-16 left-0 w-full z-30 px-3 md:px-4">
         <div className="container mx-auto flex justify-center">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-0 w-full max-w-4xl backdrop-blur-xl bg-white/10 p-1.5 md:p-3 rounded-2xl md:rounded-full border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
             {quickActions.map((action, idx) => (
