@@ -23,6 +23,9 @@ export default function Footer() {
               <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[#1877F2] hover:text-white transition-colors" aria-label="Facebook">
                 <FaFacebook className="w-5 h-5" />
               </a>
+              <a href={`https://wa.me/${siteConfig.whatsappNumber}?text=Hi, I'd like to know more about your travel services.`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[#25D366] hover:text-white transition-colors" aria-label="WhatsApp">
+                <FaWhatsapp className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
@@ -61,8 +64,8 @@ export default function Footer() {
                 <a href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`} className="text-gray-400 hover:text-white transition-colors">{siteConfig.phone}</a>
               </li>
               <li className="flex items-center gap-3">
-                <FaWhatsapp className="w-5 h-5 text-[#25D366] shrink-0" />
-                <a href={siteConfig.social.whatsapp} className="text-gray-400 hover:text-white transition-colors">{siteConfig.whatsappNumber}</a>
+                <FaWhatsapp className="w-5 h-5 text-[var(--accent-blue)] shrink-0" />
+                <a href={`https://wa.me/${siteConfig.whatsappNumber}?text=Hi, I'd like to know more about your travel services.`} className="text-gray-400 hover:text-white transition-colors">{siteConfig.whatsappNumber}</a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-[var(--accent-blue)] shrink-0" />

@@ -39,10 +39,7 @@ export default async function HolidayPackagesPage() {
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <p className="text-sm font-semibold uppercase tracking-[4px] text-white/60 mb-3">
-            EazyFly Travels
-          </p>
-
+          
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Holiday Packages
           </h1>

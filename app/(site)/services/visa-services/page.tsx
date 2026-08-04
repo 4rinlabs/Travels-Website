@@ -21,9 +21,6 @@ export default async function VisaServicesPage() {
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "32px 32px" }} />
 
         <div className="relative max-w-7xl mx-auto text-white">
-          <p className="uppercase tracking-[4px] text-sm font-semibold text-white/60">
-            EazyFly Travels
-          </p>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-4">
             Visa Services

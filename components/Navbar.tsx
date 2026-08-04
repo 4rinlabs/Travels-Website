@@ -13,6 +13,7 @@ export default function Navbar() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLLIElement>(null);
+  const mobileDropdownRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +30,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const isOutsideDesktop = dropdownRef.current && !dropdownRef.current.contains(e.target as Node);
+      const isOutsideMobile = mobileDropdownRef.current && !mobileDropdownRef.current.contains(e.target as Node);
+      
+      if (isOutsideDesktop && isOutsideMobile) {
         setServicesOpen(false);
       }
     };
@@ -62,7 +66,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <div className={`relative w-40 h-12 transition-all ${scrolled ? "opacity-100" : "opacity-90 hover:opacity-100"}`}>
-              <Image src="/logo.png" alt="EazyFly Travels" fill className="object-contain object-left" />
+              <Image src={(scrolled || menuOpen) ? "/logo.png" : "/EAZYFLY%20white.png"} alt="EazyFly Travels" fill className="object-contain object-left" />
             </div>
           </Link>
           
@@ -124,15 +128,15 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
-            <li>
-              <button onClick={() => setServicesOpen(!servicesOpen)} className="flex items-center justify-between w-full text-gray-800 font-medium">
+            <li ref={mobileDropdownRef}>
+              <button onClick={() => setServicesOpen(!servicesOpen)} className="flex items-center justify-between w-full text-gray-800 font-medium py-2">
                 Services <ChevronDown className={`w-5 h-5 transition-transform ${servicesOpen ? "rotate-180" : ""}`} />
               </button>
               {servicesOpen && (
                 <ul className="mt-2 ml-4 space-y-2 border-l-2 border-gray-100 pl-4">
-                  <li><Link href="/services/holiday-packages" className="block text-gray-600 hover:text-[var(--primary-blue)]">Holiday Packages</Link></li>
-                  <li><Link href="/services/flight-tickets" className="block text-gray-600 hover:text-[var(--primary-blue)]">Flight Tickets</Link></li>
-                  <li><Link href="/services/visa-services" className="block text-gray-600 hover:text-[var(--primary-blue)]">Visa Services</Link></li>
+                  <li><Link href="/services/holiday-packages" className="block py-2 text-gray-600 hover:text-[var(--primary-blue)]">Holiday Packages</Link></li>
+                  <li><Link href="/services/flight-tickets" className="block py-2 text-gray-600 hover:text-[var(--primary-blue)]">Flight Tickets</Link></li>
+                  <li><Link href="/services/visa-services" className="block py-2 text-gray-600 hover:text-[var(--primary-blue)]">Visa Services</Link></li>
                 </ul>
               )}
             </li>

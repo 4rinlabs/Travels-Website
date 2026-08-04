@@ -9,7 +9,7 @@ export default function HolidayPackageCard({ title, slug, image, price, duration
   const safeImage = image || "/placeholder-package.jpg";
   
   return (
-    <div className="group flex flex-col bg-white rounded-[var(--radius-card)] overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-all duration-300 border border-gray-100 h-full">
+    <div className="group relative flex flex-col bg-white rounded-[var(--radius-card)] overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-all duration-300 border border-gray-100 h-full">
       <div className="relative h-56 w-full overflow-hidden">
         <Image
           src={safeImage}
@@ -40,7 +40,7 @@ export default function HolidayPackageCard({ title, slug, image, price, duration
         <div className="mt-auto pt-4 border-t border-gray-100">
           <Link 
             href={`/services/holiday-packages/${slug}`}
-            className="flex items-center justify-between text-[var(--primary-blue)] font-semibold hover:text-[var(--brand-blue)] transition-colors group/btn"
+            className="flex items-center justify-between text-[var(--primary-blue)] font-semibold hover:text-[var(--brand-blue)] transition-colors group/btn after:absolute after:inset-0"
           >
             View Package Details
             <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" />
