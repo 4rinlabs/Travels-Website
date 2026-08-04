@@ -1,39 +1,32 @@
-import { safeImage } from "@/lib/safeImage";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-type Props = {
+interface DestinationCardProps {
   title: string;
   image: string;
-};
+}
 
-export default function DestinationCard({ title, image }: Props) {
-  const finalImage = safeImage(image);
-
+export default function DestinationCard({ title, image }: DestinationCardProps) {
+  const safeImage = image || "/placeholder-dest.jpg";
+  
   return (
-    <div className="group relative bg-white rounded-[var(--radius-card)] overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] hover:-translate-y-1 transition-all duration-300">
-      {/* IMAGE */}
-      <div className="relative h-72 overflow-hidden">
-        <Image
-          src={finalImage}
-          alt={title}
-          fill
-          sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-
-        <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
-          <h3 className="text-white text-2xl font-bold leading-tight">
-            {title}
-          </h3>
-
-          <span className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-md text-white group-hover:bg-white group-hover:text-[#2B67FF] transition-all duration-300">
-            <ArrowRight className="w-5 h-5" />
-          </span>
+    <Link href={`/destinations#${title.toLowerCase().replace(/\s+/g, "-")}`} className="group relative block overflow-hidden rounded-[var(--radius-card)] aspect-[4/5] bg-gray-200">
+      <Image
+        src={safeImage}
+        alt={title}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="object-cover transition-transform duration-700 group-hover:scale-110"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity group-hover:opacity-90" />
+      <div className="absolute inset-0 flex flex-col justify-end p-6">
+        <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
+        <div className="flex items-center text-white/90 font-medium translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <span>Explore destinations</span>
+          <ArrowRight className="ml-2 w-4 h-4" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

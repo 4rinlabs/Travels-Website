@@ -1,352 +1,235 @@
-// components/packages/PackageDetailClient.tsx
-
 "use client";
-
-import { useMemo, useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { safeImage } from "@/lib/safeImage";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { siteConfig } from "@/lib/site";
+import type { Package } from "@/lib/types";
+import { Clock, CheckCircle2, Info, X, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
-type PackageType = {
-  title: string;
-  image?: string | null;
-  duration?: string | null;
-  price?: string | null;
-  overview?: string | null;
-  itinerary?: string[];
-  inclusions?: string[];
-  exclusions?: string[];
-  gallery?: string[];
-};
-
-type Props = {
-  pkg: PackageType;
-};
+interface Props {
+  pkg: Package;
+}
 
 export default function PackageDetailClient({ pkg }: Props) {
-  const [open, setOpen] = useState(false);
-  const [index, setIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
 
-  const images = useMemo(() => {
-    const arr = [
-      safeImage(pkg.image),
-      ...(pkg.gallery || []).map((img) => safeImage(img)),
-    ].filter(Boolean);
+  const images = pkg.gallery && pkg.gallery.length > 0 ? pkg.gallery : (pkg.image ? [pkg.image] : []);
+  const safeMainImage = pkg.image || "/placeholder-package.jpg";
 
-    return [...new Set(arr)];
-  }, [pkg]);
-
-  const whatsapp = encodeURIComponent(`Hi, I want details about ${pkg.title}`);
-
-  function openGallery(i: number) {
-    setIndex(i);
-    setOpen(true);
-  }
-
-  function nextImage() {
-    setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  }
-
-  function prevImage() {
-    setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  }
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      if (e.key === "Escape") setLightboxOpen(false);
+      if (e.key === "ArrowLeft") setPhotoIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+      if (e.key === "ArrowRight") setPhotoIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen, images.length]);
 
   return (
-    <main className="bg-[#f8fafc] min-h-screen">
-      {/* HERO */}
-      <section className="relative h-[78vh] min-h-[620px] overflow-hidden">
+    <div className="bg-white">
+      {/* Hero Section */}
+      <div className="relative h-[60vh] min-h-[400px] w-full">
         <Image
-          src={images[0]}
+          src={safeMainImage}
           alt={pkg.title}
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
-
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-        <div className="relative z-10 max-w-7xl mx-auto h-full px-6 flex items-end pb-14">
-          <div className="grid lg:grid-cols-[1fr_380px] gap-10 w-full items-end">
-            {/* LEFT HERO CONTENT */}
-            <div className="text-white max-w-3xl">
-              <p className="uppercase tracking-[4px] text-sm text-white/60 font-semibold">
-                Premium Holiday Experience
-              </p>
-
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-4 leading-tight">
-                {pkg.title}
-              </h1>
-
-              {pkg.overview && (
-                <p className="mt-5 text-lg text-white/80 leading-relaxed max-w-2xl">
-                  {pkg.overview}
-                </p>
-              )}
-
-              <div className="flex flex-wrap gap-3 mt-7">
-                {pkg.duration && (
-                  <span className="px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-sm">
-                    {pkg.duration}
-                  </span>
-                )}
-
-                {pkg.price && (
-                  <span className="px-5 py-2.5 rounded-full bg-[#05A7FF] font-semibold text-sm shadow-lg">
-                    {pkg.price}
-                  </span>
-                )}
-
-                <button
-                  onClick={() => openGallery(0)}
-                  className="px-5 py-2.5 rounded-full bg-white text-[#00297A] font-semibold text-sm hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-                >
-                  View Photos
-                </button>
-              </div>
-            </div>
-
-            {/* FLOATING BOOK CARD */}
-            <div className="bg-white/95 backdrop-blur-xl rounded-[var(--radius-card)] p-8 shadow-2xl">
-              <p className="text-xs uppercase tracking-[3px] text-[#05A7FF] font-semibold">
-                Quick Booking
-              </p>
-
-              <h3 className="text-2xl font-bold text-[#00297A] mt-2">
-                Reserve This Trip
-              </h3>
-
-              {pkg.price && (
-                <p className="text-3xl font-bold text-[#05A7FF] mt-4">
-                  {pkg.price}
-                </p>
-              )}
-
-              <p className="text-slate-600 mt-3 leading-relaxed text-sm">
-                Handpicked stays, smooth transfers and expert support for a
-                stress-free journey.
-              </p>
-
-              <Link
-                href={`https://wa.me/919539430097?text=${whatsapp}`}
-                target="_blank"
-                className="block mt-7 text-center py-3.5 rounded-full text-white text-sm font-semibold shadow-md shadow-blue-500/20"
-                style={{
-                  background: "linear-gradient(135deg,#00297A,#2B67FF,#05A7FF)",
-                }}
-              >
-                WhatsApp Enquiry
-              </Link>
-
-              <Link
-                href="/contact"
-                className="block mt-3 text-center py-3.5 rounded-full border border-slate-200 text-sm font-semibold text-[#00297A] hover:bg-slate-50 transition-colors"
-              >
-                Request Callback
-              </Link>
-            </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent" />
+        <div className="absolute inset-0 flex items-end pb-12">
+          <div className="container mx-auto px-4">
+            <span className="inline-block bg-[var(--accent-blue)] text-white text-sm font-bold px-3 py-1 rounded-full mb-4">
+              {pkg.duration}
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+              {pkg.title}
+            </h1>
+            <p className="text-xl text-gray-200 max-w-2xl font-medium">
+              ₹ {pkg.price?.toString().replace(/AED|₹/gi, '').trim() || 'N/A'} <span className="text-sm font-normal">/ person</span>
+            </p>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* GALLERY */}
-      {images.length > 1 && (
-        <section className="max-w-7xl mx-auto px-6 py-20">
-          <div className="flex items-end justify-between gap-6 mb-10">
-            <div>
-              <p className="section-label">Gallery</p>
-              <h2 className="text-3xl font-bold text-[#00297A] mt-3">
-                Explore The Destination
-              </h2>
-            </div>
+      {/* Content Section */}
+      <div className="container mx-auto px-4 py-14 md:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          
+          {/* Main Info */}
+          <div className="lg:col-span-2 space-y-12">
+            
+            <section>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Overview</h2>
+              <div className="prose max-w-none text-gray-600 leading-relaxed text-lg">
+                {pkg.overview}
+              </div>
+            </section>
 
-            <button
-              onClick={() => openGallery(0)}
-              className="font-semibold text-[#05A7FF] text-sm hover:underline"
-            >
-              Open Full Gallery →
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px]">
-            {images.slice(1).map((img, i) => (
-              <button
-                key={i}
-                onClick={() => openGallery(i + 1)}
-                className={`relative overflow-hidden rounded-[var(--radius-card)] shadow-[var(--card-shadow)] group ${
-                  i === 0 ? "col-span-2 row-span-2" : ""
-                }`}
-              >
-                <Image
-                  src={img}
-                  alt={`${pkg.title}-${i + 1}`}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                />
-
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-colors duration-300" />
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* DETAILS */}
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        <div className="grid lg:grid-cols-[1fr_360px] gap-10">
-          {/* LEFT CONTENT */}
-          <div className="space-y-8">
-            {/* ITINERARY */}
-            {!!pkg.itinerary?.length && (
-              <div className="bg-white rounded-[var(--radius-card)] p-8 md:p-10 shadow-[var(--card-shadow)]">
-                <p className="section-label">Travel Plan</p>
-
-                <h2 className="text-3xl font-bold text-[#00297A] mt-3 mb-10">
-                  Day-wise Itinerary
-                </h2>
-
-                <div className="space-y-7">
-                  {pkg.itinerary.map((item, i) => (
-                    <div key={i} className="flex gap-5">
-                      <div className="flex flex-col items-center">
-                        <div className="w-10 h-10 rounded-full bg-[#05A7FF] text-white font-bold text-sm flex items-center justify-center">
-                          {i + 1}
-                        </div>
-
-                        {i !== pkg.itinerary!.length - 1 && (
-                          <div className="w-[2px] h-full bg-slate-100 mt-2" />
-                        )}
-                      </div>
-
-                      <div className="pt-1.5">
-                        <p className="font-semibold text-[#00297A] text-sm">
-                          Day {i + 1}
-                        </p>
-                        <p className="text-slate-600 mt-1 leading-relaxed text-sm">
-                          {item}
-                        </p>
-                      </div>
+            {pkg.itinerary && pkg.itinerary.length > 0 && (
+              <section>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">Itinerary</h2>
+                <div className="space-y-6">
+                  {pkg.itinerary.map((dayDesc, idx) => (
+                    <div key={idx} className="bg-gray-50 rounded-2xl p-6 border border-gray-100 relative pl-12 md:pl-16">
+                      <div className="absolute left-4 top-6 bottom-6 w-0.5 bg-gray-200"></div>
+                      <div className="absolute left-[11px] top-6 w-3 h-3 rounded-full bg-[var(--primary-blue)] ring-4 ring-gray-50"></div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">Day {idx + 1}</h4>
+                      <p className="text-gray-600 leading-relaxed">{dayDesc}</p>
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             )}
-
-            {/* INCLUDED / EXCLUDED */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {!!pkg.inclusions?.length && (
-                <div className="bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow)] border border-emerald-100">
-                  <h3 className="text-xl font-bold text-emerald-600 mb-5">
-                    Included
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {pkg.inclusions && pkg.inclusions.length > 0 && (
+                <section className="bg-green-50/50 rounded-2xl p-6 border border-green-100">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <CheckCircle2 className="w-7 h-7 text-green-500" /> Inclusions
                   </h3>
-
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 text-gray-700">
                     {pkg.inclusions.map((item, i) => (
-                      <li
-                        key={i}
-                        className="text-slate-700 text-sm leading-relaxed flex gap-2"
-                      >
-                        <span className="text-emerald-500 shrink-0">✓</span>
-                        {item}
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
+                </section>
               )}
 
-              {!!pkg.exclusions?.length && (
-                <div className="bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow)] border border-red-100">
-                  <h3 className="text-xl font-bold text-red-500 mb-5">
-                    Not Included
+              {pkg.exclusions && pkg.exclusions.length > 0 && (
+                <section className="bg-red-50/50 rounded-2xl p-6 border border-red-100">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <X className="w-7 h-7 text-red-500" /> Exclusions
                   </h3>
-
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 text-gray-700">
                     {pkg.exclusions.map((item, i) => (
-                      <li
-                        key={i}
-                        className="text-slate-700 text-sm leading-relaxed flex gap-2"
-                      >
-                        <span className="text-red-400 shrink-0">✕</span>
-                        {item}
+                      <li key={i} className="flex items-start gap-3">
+                        <X className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
+                </section>
               )}
             </div>
+            
+            {images.length > 1 && (
+              <section>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <ImageIcon className="w-8 h-8 text-[var(--accent-blue)]" /> Gallery
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {images.map((img, idx) => (
+                    <div 
+                      key={idx} 
+                      className="relative aspect-square rounded-xl overflow-hidden cursor-pointer group"
+                      onClick={() => {
+                        setPhotoIndex(idx);
+                        setLightboxOpen(true);
+                      }}
+                    >
+                      <Image
+                        src={img || ""}
+                        alt={`${pkg.title} gallery ${idx + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
 
-          {/* RIGHT STICKY CARD */}
-          <aside className="h-fit sticky top-24">
-            <div className="bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow-hover)]">
-              <h3 className="text-2xl font-bold text-[#00297A]">Need Help?</h3>
-
-              <p className="text-slate-600 mt-3 leading-relaxed text-sm">
-                Speak with our travel experts for best pricing, visa support and
-                custom itineraries.
-              </p>
-
-              <Link
-                href={`https://wa.me/919539430097?text=${whatsapp}`}
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-3xl p-8 shadow-[var(--card-shadow)] border border-gray-100 sticky top-24">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Book This Package</h3>
+              <p className="text-gray-500 mb-6">Get the best quote tailored for you.</p>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-4 rounded-xl">
+                  <Clock className="w-6 h-6 text-[var(--accent-blue)]" />
+                  <span className="font-semibold">{pkg.duration}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-4 rounded-xl">
+                  <Info className="w-6 h-6 text-[var(--accent-blue)]" />
+                  <span className="font-semibold">Starting from ₹ {pkg.price?.toString().replace(/AED|₹/gi, '').trim() || 'N/A'}</span>
+                </div>
+              </div>
+              
+              <a 
+                href={`https://wa.me/${siteConfig.whatsappNumber}?text=Hi, I am interested in the ${pkg.title} package.`}
                 target="_blank"
-                className="block mt-7 text-center py-3.5 rounded-full text-white text-sm font-semibold shadow-md shadow-blue-500/20"
-                style={{
-                  background: "linear-gradient(135deg,#00297A,#2B67FF,#05A7FF)",
-                }}
+                rel="noopener noreferrer"
+                className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 px-6 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg"
               >
-                Chat on WhatsApp
-              </Link>
-
-              <Link
-                href="/contact"
-                className="block mt-3 text-center py-3.5 rounded-full border border-slate-200 text-sm font-semibold text-[#00297A] hover:bg-slate-50 transition-colors"
-              >
-                Contact Team
-              </Link>
+                <FaWhatsapp className="w-6 h-6" /> Book via WhatsApp
+              </a>
+              <p className="text-center text-sm text-gray-400 mt-4">We usually reply within 5 minutes</p>
             </div>
-          </aside>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* LIGHTBOX */}
-      {open && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center px-4">
-          <button
-            onClick={() => setOpen(false)}
-            className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <div 
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center backdrop-blur-sm"
+        >
+          <button 
+            aria-label="Close gallery"
+            className="absolute top-6 right-6 text-white/75 hover:text-white transition-colors"
+            onClick={() => setLightboxOpen(false)}
           >
-            <X className="w-5 h-5" />
+            <X className="w-10 h-10" />
           </button>
+          
+          {images.length > 1 && (
+             <button 
+               aria-label="Previous image"
+               className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+               onClick={() => setPhotoIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+             >
+               <ChevronLeft className="w-8 h-8" />
+             </button>
+          )}
 
-          <button
-            onClick={prevImage}
-            className="absolute left-5 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-
-          <div className="relative w-full max-w-5xl h-[80vh] rounded-[var(--radius-card)] overflow-hidden">
+          <div className="relative w-full max-w-5xl aspect-video md:aspect-[21/9]">
             <Image
-              src={images[index]}
-              alt="Gallery"
+              src={images[photoIndex]}
+              alt={`${pkg.title} gallery full size`}
               fill
               className="object-contain"
             />
           </div>
 
-          <button
-            onClick={nextImage}
-            className="absolute right-5 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-
-          <div className="absolute bottom-6 text-white/60 tracking-widest text-xs">
-            {index + 1} / {images.length}
+          {images.length > 1 && (
+            <button 
+              aria-label="Next image"
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              onClick={() => setPhotoIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+          )}
+          
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/75 font-medium">
+            {photoIndex + 1} / {images.length}
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

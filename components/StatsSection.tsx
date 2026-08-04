@@ -1,38 +1,28 @@
-import { Globe2, Users, ShieldCheck, Headset } from "lucide-react";
-
-const stats = [
-  { icon: Globe2, number: "20+", label: "Destinations" },
-  { icon: Users, number: "1000+", label: "Happy Travelers" },
-  { icon: ShieldCheck, number: "100%", label: "Trusted Support" },
-  { icon: Headset, number: "24/7", label: "Customer Assistance" },
-];
-
 export default function StatsSection() {
+  const stats = [
+    { value: "20+", label: "Destinations" },
+    { value: "1000+", label: "Happy Travelers" },
+    { value: "100%", label: "Trusted Support" },
+    { value: "24/7", label: "Assistance" },
+  ];
+
   return (
-    <section className="py-20 bg-[#f8fafc]">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
-          {stats.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={index}
-                className={`flex flex-col items-center text-center py-8 ${
-                  index < stats.length - 1
-                    ? "md:border-r md:border-slate-200"
-                    : ""
-                }`}
-              >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2B67FF] to-[#05A7FF] flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-3xl font-bold text-[#00297A]">
-                  {item.number}
-                </h3>
-                <p className="text-slate-500 text-sm mt-1">{item.label}</p>
+    <section className="bg-[var(--primary-blue)] py-12 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 opacity-10" style={{ background: "radial-gradient(circle at 50% 50%, var(--light-accent) 0%, transparent 50%)" }} />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-white/20">
+          {stats.map((stat, i) => (
+            <div key={i} className={`text-center ${i === 0 ? "" : "pl-8 md:pl-12"}`}>
+              <div className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+                {stat.value}
               </div>
-            );
-          })}
+              <div className="text-sm md:text-base text-blue-100 font-medium uppercase tracking-wider">
+                {stat.label}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

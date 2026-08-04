@@ -1,24 +1,31 @@
 import Link from "next/link";
 import { Plus, Pencil } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import DeletePackageButton from "@/components/admin/DeletePackageButton";
 
 export default async function AdminPackagesPage() {
+  const supabase = await createClient();
   const { data: packages, error } = await supabase
     .from("packages")
     .select("*")
     .order("created_at", { ascending: false });
 
+  if (error) {
+    return (
+      <div className="p-6 text-red-600">
+        <h1 className="text-2xl font-bold mb-4">Error</h1>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#F5FAFF] px-4 md:px-6 py-10 md:py-16">
       <div className="max-w-6xl mx-auto">
-
         {/* Header */}
         <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-10">
           <div>
-            <p className="text-sm text-[#05A7FF] uppercase">
-              Admin / Packages
-            </p>
+            <p className="text-sm text-[#05A7FF] uppercase">Admin / Packages</p>
 
             <h1 className="text-3xl md:text-4xl font-bold text-[#00297A] mt-2">
               Manage Packages
@@ -26,11 +33,10 @@ export default async function AdminPackagesPage() {
           </div>
 
           <Link
-            href="/admin/visa/new"
+            href="/admin/packages/new"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-white font-semibold shadow-md w-full md:w-auto"
             style={{
-              background:
-                "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",
+              background: "linear-gradient(135deg, #00297A, #2B67FF, #05A7FF)",
             }}
           >
             <Plus className="w-5 h-5" />
@@ -59,7 +65,7 @@ export default async function AdminPackagesPage() {
                 <Link href={`/admin/packages/${pkg.id}/edit`}>
                   <Pencil className="w-4 h-4 text-blue-500" />
                 </Link>
-                <DeletePackageButton id={pkg.id} />
+                <DeletePackageButton id={pkg.id} title={pkg.title} />
               </div>
             </div>
           ))}
@@ -69,21 +75,25 @@ export default async function AdminPackagesPage() {
         <div className="md:hidden space-y-5">
           {packages?.map((pkg) => (
             <div key={pkg.id} className="bg-white p-5 rounded-2xl shadow">
-              <h2 className="font-bold text-lg text-[#00297A]">
-                {pkg.title}
-              </h2>
+              <h2 className="font-bold text-lg text-[#00297A]">{pkg.title}</h2>
 
               <div className="text-sm text-gray-600 mt-2">
-                <p><strong>Duration:</strong> {pkg.duration}</p>
-                <p><strong>Price:</strong> {pkg.price}</p>
-                <p><strong>Slug:</strong> {pkg.slug}</p>
+                <p>
+                  <strong>Duration:</strong> {pkg.duration}
+                </p>
+                <p>
+                  <strong>Price:</strong> {pkg.price}
+                </p>
+                <p>
+                  <strong>Slug:</strong> {pkg.slug}
+                </p>
               </div>
 
               <div className="flex justify-end gap-4 mt-4">
                 <Link href={`/admin/packages/${pkg.id}/edit`}>
                   <Pencil className="w-5 h-5 text-blue-500" />
                 </Link>
-                <DeletePackageButton id={pkg.id} />
+                <DeletePackageButton id={pkg.id} title={pkg.title} />
               </div>
             </div>
           ))}

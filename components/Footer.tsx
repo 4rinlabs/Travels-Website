@@ -1,161 +1,86 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
-import { FaInstagram, FaFacebookF, FaYoutube } from "react-icons/fa";
 import { siteConfig } from "@/lib/site";
+import { Globe, Camera, Video, MapPin, Phone, Mail } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="bg-[#00297A] text-white">
-      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-        {/* COMPANY */}
-        <div>
-          <h2 className="text-xl font-bold mb-4">
-            {siteConfig.companyName}
-          </h2>
-          <p className="text-blue-200/70 leading-7 text-sm mb-6">
-            Your trusted travel partner for holiday packages, flight tickets,
-            and visa services.
-          </p>
-
-          <div className="flex gap-3">
-            {siteConfig.social.instagram && (
-              <a
-                href={siteConfig.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                aria-label="Instagram"
-              >
-                <FaInstagram size={16} />
+    <footer className="bg-gray-900 text-gray-300 pt-16 pb-8">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          {/* About */}
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6">EazyFly Travels</h3>
+            <p className="text-gray-400 mb-6 leading-relaxed">
+              Your trusted partner for memorable journeys. We provide comprehensive travel solutions including bespoke holiday packages, flight bookings, and reliable visa services.
+            </p>
+            <div className="flex items-center space-x-4">
+              <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[var(--brand-blue)] hover:text-white transition-colors" aria-label="Instagram">
+                <Camera className="w-5 h-5" />
               </a>
-            )}
-
-            {siteConfig.social.facebook && (
-              <a
-                href={siteConfig.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                aria-label="Facebook"
-              >
-                <FaFacebookF size={14} />
+              <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[var(--brand-blue)] hover:text-white transition-colors" aria-label="Facebook">
+                <Globe className="w-5 h-5" />
               </a>
-            )}
-
-            {siteConfig.social.youtube && (
-              <a
-                href={siteConfig.social.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                aria-label="YouTube"
-              >
-                <FaYoutube size={16} />
+              <a href={siteConfig.social.youtube} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[var(--brand-blue)] hover:text-white transition-colors" aria-label="Youtube">
+                <Video className="w-5 h-5" />
               </a>
-            )}
+            </div>
+          </div>
 
-            {siteConfig.social.whatsapp && (
-              <a
-                href={siteConfig.social.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                aria-label="WhatsApp"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </a>
-            )}
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-lg font-semibold text-white mb-6">Quick Links</h4>
+            <ul className="space-y-3">
+              <li><Link href="/" className="hover:text-[var(--accent-blue)] transition-colors">Home</Link></li>
+              <li><Link href="/about" className="hover:text-[var(--accent-blue)] transition-colors">About Us</Link></li>
+              <li><Link href="/destinations" className="hover:text-[var(--accent-blue)] transition-colors">Destinations</Link></li>
+              <li><Link href="/blog" className="hover:text-[var(--accent-blue)] transition-colors">Blog</Link></li>
+              <li><Link href="/contact" className="hover:text-[var(--accent-blue)] transition-colors">Contact</Link></li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h4 className="text-lg font-semibold text-white mb-6">Services</h4>
+            <ul className="space-y-3">
+              <li><Link href="/services/holiday-packages" className="hover:text-[var(--accent-blue)] transition-colors">Holiday Packages</Link></li>
+              <li><Link href="/services/flight-tickets" className="hover:text-[var(--accent-blue)] transition-colors">Flight Tickets</Link></li>
+              <li><Link href="/services/visa-services" className="hover:text-[var(--accent-blue)] transition-colors">Visa Services</Link></li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-lg font-semibold text-white mb-6">Contact Info</h4>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-[var(--accent-blue)] shrink-0 mt-0.5" />
+                <span className="text-gray-400">{siteConfig.address}</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-[var(--accent-blue)] shrink-0" />
+                <a href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`} className="text-gray-400 hover:text-white transition-colors">{siteConfig.phone}</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaWhatsapp className="w-5 h-5 text-[#25D366] shrink-0" />
+                <a href={siteConfig.social.whatsapp} className="text-gray-400 hover:text-white transition-colors">{siteConfig.whatsappNumber}</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-[var(--accent-blue)] shrink-0" />
+                <a href={`mailto:${siteConfig.email}`} className="text-gray-400 hover:text-white transition-colors">{siteConfig.email}</a>
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* QUICK LINKS */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-200/50 mb-5">
-            Quick Links
-          </h3>
-          <ul className="space-y-3">
-            {[
-              { label: "Home", href: "/" },
-              { label: "Services", href: "/services" },
-              { label: "Holiday Packages", href: "/services/holiday-packages" },
-              { label: "About", href: "/about" },
-              { label: "Contact", href: "/contact" },
-            ].map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="text-blue-100/70 hover:text-white text-sm transition-colors duration-200"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* SERVICES */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-200/50 mb-5">
-            Our Services
-          </h3>
-          <ul className="space-y-3">
-            {[
-              { label: "Holiday Packages", href: "/services/holiday-packages" },
-              { label: "Flight Tickets", href: "/services/flight-tickets" },
-              { label: "Visa Services", href: "/services/visa-services" },
-            ].map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="text-blue-100/70 hover:text-white text-sm transition-colors duration-200"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* CONTACT */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-200/50 mb-5">
-            Contact Info
-          </h3>
-
-          <div className="space-y-4">
-            <div className="flex gap-3 items-start">
-              <Phone className="w-4 h-4 mt-0.5 text-blue-300/50 flex-shrink-0" />
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="text-blue-100/70 hover:text-white text-sm transition-colors"
-              >
-                {siteConfig.phone}
-              </a>
-            </div>
-
-            <div className="flex gap-3 items-start">
-              <Mail className="w-4 h-4 mt-0.5 text-blue-300/50 flex-shrink-0" />
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="text-blue-100/70 hover:text-white text-sm transition-colors"
-              >
-                {siteConfig.email}
-              </a>
-            </div>
-
-            <div className="flex gap-3 items-start">
-              <MapPin className="w-4 h-4 mt-0.5 text-blue-300/50 flex-shrink-0" />
-              <p className="text-blue-100/70 text-sm leading-6">{siteConfig.address}</p>
-            </div>
+        <div className="pt-8 border-t border-gray-800 text-center text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+          <p>&copy; {year} EazyFly Travels. All rights reserved.</p>
+          <div className="flex space-x-4">
+            <Link href="/privacy" className="hover:text-gray-300">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-gray-300">Terms of Service</Link>
           </div>
-        </div>
-      </div>
-
-      {/* BOTTOM BAR */}
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-blue-200/50">
-          <p>© 2026 {siteConfig.companyName}. All rights reserved.</p>
-          <p>Designed and Developed by 4RinLabs.</p>
         </div>
       </div>
     </footer>

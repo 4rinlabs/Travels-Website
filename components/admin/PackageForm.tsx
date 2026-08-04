@@ -1,388 +1,299 @@
-// components/admin/PackageForm.tsx
-
 "use client";
 
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { Package, PackageFormProps } from "@/lib/types";
+import DynamicListInput from "./DynamicListInput";
+import ImageUpload from "./ImageUpload";
+import ImageGalleryUpload from "./ImageGalleryUpload";
 
-type PackageFormProps = {
-  mode: "create" | "edit";
-  initialData?: any;
-};
-
-export default function PackageForm({
-  mode,
-  initialData,
-}: PackageFormProps) {
-  const router = useRouter();
-
+export default function PackageForm({ initialData }: PackageFormProps) {
+  const [formData, setFormData] = useState<Partial<Package>>(
+    initialData || {
+      title: "",
+      slug: "",
+      duration: "",
+      price: "",
+      overview: "",
+      image: "",
+      itinerary: [""],
+      inclusions: [],
+      exclusions: [],
+      gallery: []
+    }
+  );
+  
+  const [itineraryDays, setItineraryDays] = useState(initialData?.itinerary?.length || 1);
+  
+  const parsedDays = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(D|Day)/i)?.[1] || "0") : 0;
+  const parsedNights = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(N|Night)/i)?.[1] || "0") : 0;
+  
+  const [durationDays, setDurationDays] = useState<number>(parsedDays || 1);
+  const [durationNights, setDurationNights] = useState<number>(parsedNights || 1);
+  
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const supabase = createClient();
 
-  const [form, setForm] = useState({
-    title: initialData?.title || "",
-    slug: initialData?.slug || "",
-    image: initialData?.image || "",
-    duration: initialData?.duration || "",
-    price: initialData?.price || "",
-    overview: initialData?.overview || "",
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    itinerary: initialData?.itinerary?.join("\n") || "",
-    inclusions: initialData?.inclusions?.join("\n") || "",
-    exclusions: initialData?.exclusions?.join("\n") || "",
-    gallery: initialData?.gallery?.join("\n") || "",
-  });
-
-  /* ---------------------------
-     INPUT CHANGE
-  ---------------------------- */
-  function handleChange(
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement
-    >
-  ) {
-    const { name, value } = e.target;
-
-    // auto slug from title
-    if (name === "title") {
-      setForm((prev) => ({
-        ...prev,
-        title: value,
-        slug:
-          prev.slug ||
-          value
-            .toLowerCase()
-            .trim()
-            .replace(/[^a-z0-9\s-]/g, "")
-            .replace(/\s+/g, "-"),
-      }));
-      return;
-    }
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
-
-  /* ---------------------------
-     BANNER IMAGE UPLOAD
-  ---------------------------- */
-  async function handleBannerUpload(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const file = e.target.files?.[0];
-
-    if (!file) return;
-
-    setLoading(true);
-
-    const ext = file.name.split(".").pop();
-    const fileName = `${Date.now()}-${Math.random()
-      .toString(36)
-      .slice(2)}.${ext}`;
-
-    const { error } = await supabase.storage
-      .from("packages")
-      .upload(fileName, file);
-
-    if (error) {
-      alert("Banner upload failed");
-      setLoading(false);
-      return;
-    }
-
-    const { data } = supabase.storage
-      .from("packages")
-      .getPublicUrl(fileName);
-
-    setForm((prev) => ({
-      ...prev,
-      image: data.publicUrl,
-    }));
-
-    setLoading(false);
-  }
-
-  /* ---------------------------
-     MULTI GALLERY UPLOAD
-  ---------------------------- */
-  async function handleGalleryUpload(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const files = e.target.files;
-
-    if (!files || files.length === 0) return;
-
-    setLoading(true);
-
-    const urls: string[] = [];
-
-    for (const file of Array.from(files)) {
-      const ext = file.name.split(".").pop();
-
-      const fileName = `${Date.now()}-${Math.random()
-        .toString(36)
-        .slice(2)}.${ext}`;
-
-      const { error } = await supabase.storage
-        .from("packages")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-
-      if (!error) {
-        const { data } = supabase.storage
-          .from("packages")
-          .getPublicUrl(fileName);
-
-        urls.push(data.publicUrl);
+  const handleItineraryDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const days = parseInt(e.target.value) || 1;
+    const maxDays = Math.min(Math.max(days, 1), 30); // limit 1-30
+    setItineraryDays(maxDays);
+    
+    const currentItinerary = formData.itinerary || [];
+    const newItinerary = [...currentItinerary];
+    if (maxDays > currentItinerary.length) {
+      for (let i = currentItinerary.length; i < maxDays; i++) {
+        newItinerary.push("");
       }
+    } else {
+      newItinerary.splice(maxDays);
     }
+    setFormData({ ...formData, itinerary: newItinerary });
+  };
 
-    setForm((prev) => ({
-      ...prev,
-      gallery: prev.gallery
-        ? prev.gallery + "\n" + urls.join("\n")
-        : urls.join("\n"),
-    }));
+  const handleItineraryChange = (index: number, value: string) => {
+    const newItinerary = [...(formData.itinerary || [])];
+    newItinerary[index] = value;
+    setFormData({ ...formData, itinerary: newItinerary });
+  };
 
-    setLoading(false);
-  }
+  const handleSlugify = () => {
+    if (formData.title) {
+      const slug = formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      setFormData({ ...formData, slug });
+    }
+  };
 
-  /* ---------------------------
-     SUBMIT
-  ---------------------------- */
-  async function handleSubmit(
-    e: React.FormEvent
-  ) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setLoading(true);
+    setError(null);
 
     const payload = {
-      title: form.title.trim(),
-      slug: form.slug.trim(),
-      image: form.image.trim(),
-      duration: form.duration.trim(),
-      price: form.price.trim(),
-      overview: form.overview.trim(),
-
-      itinerary: form.itinerary
-        .split("\n")
-        .map((x: string) => x.trim())
-        .filter(Boolean),
-
-      inclusions: form.inclusions
-        .split("\n")
-        .map((x: string) => x.trim())
-        .filter(Boolean),
-
-      exclusions: form.exclusions
-        .split("\n")
-        .map((x: string) => x.trim())
-        .filter(Boolean),
-
-      gallery: form.gallery
-        .split("\n")
-        .map((x: string) => x.trim())
-        .filter(Boolean),
+      ...formData,
+      duration: `${durationDays} Days / ${durationNights} Nights`,
+      itinerary: formData.itinerary || [],
+      inclusions: formData.inclusions || [],
+      exclusions: formData.exclusions || [],
+      gallery: formData.gallery || []
     };
 
-    if (mode === "create") {
-      await supabase
-        .from("packages")
-        .insert([payload]);
-    } else {
-      await supabase
+    if (initialData?.id) {
+      // Update
+      const { error: submitError } = await supabase
         .from("packages")
         .update(payload)
         .eq("id", initialData.id);
+      
+      if (submitError) {
+        setError(submitError.message);
+        setLoading(false);
+        return;
+      }
+    } else {
+      // Insert
+      const { error: submitError } = await supabase
+        .from("packages")
+        .insert([payload]);
+        
+      if (submitError) {
+        setError(submitError.message);
+        setLoading(false);
+        return;
+      }
     }
-
-    setLoading(false);
 
     router.push("/admin/packages");
     router.refresh();
-  }
+  };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-6 bg-white p-10 rounded-3xl shadow-md"
-    >
-      {/* BASIC */}
-      <div className="grid md:grid-cols-2 gap-6">
-
-        <InputField
-          label="Title"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-        />
-
-        <InputField
-          label="Slug"
-          name="slug"
-          value={form.slug}
-          onChange={handleChange}
-        />
-
-        <InputField
-          label="Duration"
-          name="duration"
-          value={form.duration}
-          onChange={handleChange}
-        />
-
-        <InputField
-          label="Price"
-          name="price"
-          value={form.price}
-          onChange={handleChange}
-        />
-
-      </div>
-
-      {/* BANNER */}
-      <div>
-        <label className="block mb-2 font-semibold text-sm">
-          Banner Image Upload
-        </label>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleBannerUpload}
-          className="w-full border rounded-2xl px-4 py-3"
-        />
-
-        {form.image && (
-          <img
-            src={form.image}
-            alt="banner"
-            className="mt-4 h-40 w-full object-cover rounded-2xl"
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {error && (
+        <div className="bg-red-50 text-red-600 p-4 rounded-md">
+          {error}
+        </div>
+      )}
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            required
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
           />
-        )}
+        </div>
+        
+        <div>
+          <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-1">Slug</label>
+          <div className="flex space-x-2">
+            <input
+              id="slug"
+              name="slug"
+              type="text"
+              required
+              value={formData.slug}
+              onChange={handleChange}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
+            />
+            <button
+              type="button"
+              onClick={handleSlugify}
+              className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-md border border-gray-300 text-sm transition-colors"
+            >
+              Generate
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+          <div className="flex items-center space-x-2">
+            <div className="flex-1 flex items-center border border-gray-300 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-brand-500 focus-within:border-brand-500">
+              <input
+                type="number"
+                min="1"
+                required
+                value={durationDays}
+                onChange={(e) => setDurationDays(parseInt(e.target.value) || 0)}
+                className="w-full px-3 py-2 outline-none"
+              />
+              <span className="bg-gray-50 px-3 py-2 text-gray-500 text-sm border-l border-gray-300">Days</span>
+            </div>
+            <div className="flex-1 flex items-center border border-gray-300 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-brand-500 focus-within:border-brand-500">
+              <input
+                type="number"
+                min="0"
+                required
+                value={durationNights}
+                onChange={(e) => setDurationNights(parseInt(e.target.value) || 0)}
+                className="w-full px-3 py-2 outline-none"
+              />
+              <span className="bg-gray-50 px-3 py-2 text-gray-500 text-sm border-l border-gray-300">Nights</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+          <input
+            id="price"
+            name="price"
+            type="text"
+            required
+            value={formData.price || ""}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
+            placeholder="e.g. ₹25,000"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <ImageUpload
+            label="Main Image"
+            value={formData.image || ""}
+            onChange={(url) => setFormData({ ...formData, image: url })}
+            bucketName="images"
+          />
+        </div>
       </div>
 
-      {/* OVERVIEW */}
-      <TextAreaField
-        label="Overview"
-        name="overview"
-        value={form.overview}
-        onChange={handleChange}
-        rows={5}
-      />
-
-      {/* ITINERARY */}
-      <TextAreaField
-        label="Itinerary (one line each)"
-        name="itinerary"
-        value={form.itinerary}
-        onChange={handleChange}
-        rows={6}
-      />
-
-      {/* INCLUSION */}
-      <TextAreaField
-        label="Inclusions (one line each)"
-        name="inclusions"
-        value={form.inclusions}
-        onChange={handleChange}
-        rows={6}
-      />
-
-      {/* EXCLUSION */}
-      <TextAreaField
-        label="Exclusions (one line each)"
-        name="exclusions"
-        value={form.exclusions}
-        onChange={handleChange}
-        rows={6}
-      />
-
-      {/* GALLERY */}
       <div>
-        <label className="block mb-2 font-semibold text-sm">
-          Gallery Upload (Multiple)
-        </label>
-
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleGalleryUpload}
-          className="w-full border rounded-2xl px-4 py-3"
+        <label htmlFor="overview" className="block text-sm font-medium text-gray-700 mb-1">Overview</label>
+        <textarea
+          id="overview"
+          name="overview"
+          required
+          rows={4}
+          value={formData.overview || ""}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
         />
       </div>
 
-      <TextAreaField
-        label="Gallery URLs (Auto Added)"
-        name="gallery"
-        value={form.gallery}
-        onChange={handleChange}
-        rows={6}
-      />
+      <div className="border-t border-gray-200 pt-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Itinerary</h3>
+        <div className="mb-4">
+          <label htmlFor="itineraryDays" className="block text-sm font-medium text-gray-700 mb-1">Number of Days</label>
+          <input
+            id="itineraryDays"
+            type="number"
+            min="1"
+            max="30"
+            value={itineraryDays}
+            onChange={handleItineraryDaysChange}
+            className="w-32 px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
+          />
+        </div>
+        
+        <div className="space-y-4">
+          {(formData.itinerary || []).map((dayDesc, idx) => (
+            <div key={idx} className="bg-gray-50 p-4 rounded-md border border-gray-200">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Day {idx + 1}</label>
+              <textarea
+                rows={3}
+                value={dayDesc}
+                onChange={(e) => handleItineraryChange(idx, e.target.value)}
+                placeholder={`Description for Day ${idx + 1}...`}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
-      {/* BUTTON */}
-      <button
-        disabled={loading}
-        className="px-8 py-4 rounded-full text-white font-semibold"
-        style={{
-          background:
-            "linear-gradient(135deg,#00297A,#2B67FF,#05A7FF)",
-        }}
-      >
-        {loading
-          ? "Saving..."
-          : mode === "create"
-          ? "Create Package"
-          : "Update Package"}
-      </button>
+      <div className="border-t border-gray-200 pt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <DynamicListInput
+          label="Inclusions"
+          items={formData.inclusions || []}
+          onChange={(items) => setFormData({ ...formData, inclusions: items })}
+          placeholder="e.g. Breakfast included"
+        />
+        <DynamicListInput
+          label="Exclusions"
+          items={formData.exclusions || []}
+          onChange={(items) => setFormData({ ...formData, exclusions: items })}
+          placeholder="e.g. Visa fees"
+        />
+      </div>
+
+      <div className="border-t border-gray-200 pt-6">
+        <ImageGalleryUpload
+          label="Gallery Images"
+          items={formData.gallery || []}
+          onChange={(items) => setFormData({ ...formData, gallery: items })}
+          bucketName="images"
+        />
+      </div>
+
+      <div className="flex justify-end pt-4 border-t border-gray-100">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="mr-4 px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={loading}
+          className="px-6 py-2 bg-brand-600 text-white rounded-md hover:bg-brand-700 transition-colors disabled:opacity-50"
+        >
+          {loading ? "Saving..." : initialData ? "Update Package" : "Create Package"}
+        </button>
+      </div>
     </form>
-  );
-}
-
-/* ---------------------------
-   REUSABLE INPUT
----------------------------- */
-function InputField({
-  label,
-  ...props
-}: any) {
-  return (
-    <div>
-      <label className="block mb-2 font-semibold text-sm">
-        {label}
-      </label>
-
-      <input
-        {...props}
-        className="w-full border rounded-2xl px-4 py-3"
-      />
-    </div>
-  );
-}
-
-/* ---------------------------
-   REUSABLE TEXTAREA
----------------------------- */
-function TextAreaField({
-  label,
-  ...props
-}: any) {
-  return (
-    <div>
-      <label className="block mb-2 font-semibold text-sm">
-        {label}
-      </label>
-
-      <textarea
-        {...props}
-        className="w-full border rounded-2xl px-4 py-3"
-      />
-    </div>
   );
 }

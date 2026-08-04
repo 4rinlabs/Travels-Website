@@ -1,319 +1,149 @@
 "use client";
-
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import {
-  Menu,
-  X,
-  ChevronDown,
-  MessageCircle,
-} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, X, ChevronDown } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { siteConfig } from "@/lib/site";
 
 export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const dropdownRef = useRef<HTMLLIElement>(null);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  /* Header scroll effect */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
-
-    return () =>
-      window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* Desktop dropdown outside click */
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
+    setMenuOpen(false);
+    setServicesOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setServicesOpen(false);
       }
-    }
-
-    document.addEventListener("mousedown", handleClick);
-
-    return () =>
-      document.removeEventListener(
-        "mousedown",
-        handleClick
-      );
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  /* Lock body scroll when mobile menu open */
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setServicesOpen(false);
+        setMenuOpen(false);
+      }
     };
-  }, [menuOpen]);
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, []);
 
-  const closeMenu = () => setMenuOpen(false);
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "About Us", href: "/about" },
+    { name: "Destinations", href: "/services/holiday-packages" },
+    { name: "Blog", href: "/blog" },
+    { name: "Contact", href: "/contact" },
+  ];
 
   return (
-    <>
-      {/* HEADER */}
-      <header
-        className={`sticky top-0 z-[9999] transition-all duration-300 ${
-          scrolled
-            ? "bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-100"
-            : "bg-white border-b border-transparent"
-        }`}
-      >
-        <nav className="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
-          {/* LOGO */}
-          <Link
-            href="/"
-            className="shrink-0"
-            onClick={closeMenu}
-          >
-            <Image
-              src="/logo.png"
-              alt="EazyFly Travels"
-              width={160}
-              height={55}
-              priority
-              className="w-[120px] sm:w-[140px] md:w-[152px] h-auto"
-            />
-          </Link>
-
-          {/* DESKTOP MENU */}
-          <div className="hidden md:flex items-center gap-1 text-[0.925rem] font-medium text-slate-600">
-            <Link
-              href="/"
-              className="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50"
-            >
-              Home
-            </Link>
-
-            {/* SERVICES */}
-            <div
-              className="relative"
-              ref={dropdownRef}
-            >
-              <button
-                onClick={() =>
-                  setServicesOpen(!servicesOpen)
-                }
-                className="flex items-center gap-1 px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50"
-              >
-                Services
-
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform ${
-                    servicesOpen
-                      ? "rotate-180"
-                      : ""
-                  }`}
-                />
-              </button>
-
-              {servicesOpen && (
-                <div className="absolute top-full mt-2 left-0 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2">
-                  <Link
-                    href="/services/holiday-packages"
-                    className="block px-5 py-3 hover:bg-blue-50"
-                  >
-                    Holiday Packages
-                  </Link>
-
-                  <Link
-                    href="/services/flight-tickets"
-                    className="block px-5 py-3 hover:bg-blue-50"
-                  >
-                    Flight Tickets
-                  </Link>
-
-                  <Link
-                    href="/services/visa-services"
-                    className="block px-5 py-3 hover:bg-blue-50"
-                  >
-                    Visa Services
-                  </Link>
-                </div>
-              )}
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "bg-white/80 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"}`}>
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <div className={`relative w-40 h-12 transition-all ${scrolled ? "opacity-100" : "opacity-90 hover:opacity-100"}`}>
+              <Image src="/logo.png" alt="EazyFly Travels" fill className="object-contain object-left" />
             </div>
+          </Link>
+          
+          {/* Desktop Nav */}
+          <ul className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <li key={link.name}>
+                <Link href={link.href} className={`text-sm font-medium hover:text-[var(--accent-blue)] transition-colors ${scrolled ? "text-gray-700" : "text-white/90 hover:text-white"}`}>
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+            <li className="relative" ref={dropdownRef}>
+              <button 
+                onClick={() => setServicesOpen(!servicesOpen)}
+                aria-haspopup="true"
+                aria-expanded={servicesOpen}
+                className={`flex items-center text-sm font-medium hover:text-[var(--accent-blue)] transition-colors ${scrolled ? "text-gray-700" : "text-white/90 hover:text-white"}`}
+              >
+                Services <ChevronDown className="ml-1 w-4 h-4" />
+              </button>
+              {servicesOpen && (
+                <ul className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 animate-slide-down">
+                  <li><Link href="/services/holiday-packages" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[var(--primary-blue)]">Holiday Packages</Link></li>
+                  <li><Link href="/services/flight-tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[var(--primary-blue)]">Flight Tickets</Link></li>
+                  <li><Link href="/services/visa-services" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[var(--primary-blue)]">Visa Services</Link></li>
+                </ul>
+              )}
+            </li>
+          </ul>
 
-            <Link
-              href="/about"
-              className="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50"
-            >
-              About
-            </Link>
-
-            <Link
-              href="/contact"
-              className="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50"
-            >
-              Contact
-            </Link>
-          </div>
-
-          {/* DESKTOP CTA */}
-          <div className="hidden md:block">
-            <a
-              href={siteConfig.social.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white"
-              style={{
-                background:
-                  "linear-gradient(135deg,#2B67FF,#05A7FF)",
-              }}
-            >
-              <MessageCircle className="w-4 h-4" />
-              Enquire Now
+          <div className="hidden md:flex items-center">
+            <a href={siteConfig.social.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-[var(--primary-blue)] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[var(--brand-blue)] transition-colors shadow-md hover:shadow-lg">
+              <FaWhatsapp className="w-4 h-4" /> Connect
             </a>
           </div>
 
-          {/* MOBILE BUTTON */}
-          <button
+          {/* Mobile Toggle */}
+          <button 
             type="button"
-            aria-label="Toggle menu"
+            className={`md:hidden p-3 -mr-3 rounded-md cursor-pointer relative z-50 ${scrolled ? "text-gray-900" : "text-white"}`} 
+            onClick={() => setMenuOpen(!menuOpen)} 
+            aria-label="Toggle menu" 
             aria-expanded={menuOpen}
-            onClick={() =>
-              setMenuOpen(!menuOpen)
-            }
-            style={{
-              WebkitTapHighlightColor:
-                "transparent",
-            }}
-            className="md:hidden relative z-[10060] p-2 rounded-lg touch-manipulation active:scale-95"
           >
-            {menuOpen ? (
-              <X className="w-7 h-7 text-slate-700" />
-            ) : (
-              <Menu className="w-7 h-7 text-slate-700" />
-            )}
+            {menuOpen ? <X className="w-6 h-6 pointer-events-none" /> : <Menu className="w-6 h-6 pointer-events-none" />}
           </button>
-        </nav>
-      </header>
-
-      {/* MOBILE DRAWER */}
-      <div
-        className={`fixed inset-0 z-[10050] md:hidden transition-all duration-300 ${
-          menuOpen
-            ? "visible opacity-100"
-            : "invisible opacity-0 pointer-events-none"
-        }`}
-      >
-        {/* BACKDROP */}
-        <div
-          onClick={closeMenu}
-          className="absolute inset-0 bg-black/40"
-        />
-
-        {/* DRAWER */}
-        <aside
-          className={`absolute right-0 top-0 h-full w-[84%] max-w-sm bg-white shadow-2xl transition-transform duration-300 ${
-            menuOpen
-              ? "translate-x-0"
-              : "translate-x-full"
-          }`}
-        >
-          {/* TOP */}
-          <div className="h-[72px] px-5 border-b border-slate-100 flex items-center justify-between">
-            <Image
-              src="/logo.png"
-              alt="EazyFly Travels"
-              width={120}
-              height={40}
-              className="h-auto"
-            />
-
-            <button
-              onClick={closeMenu}
-              className="p-2 rounded-lg active:bg-slate-100"
-            >
-              <X className="w-6 h-6 text-slate-700" />
-            </button>
-          </div>
-
-          {/* LINKS */}
-          <nav className="px-5 py-4 flex flex-col text-slate-700">
-            <Link
-              href="/"
-              onClick={closeMenu}
-              className="py-4 border-b border-slate-100"
-            >
-              Home
-            </Link>
-
-            <p className="pt-5 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Services
-            </p>
-
-            <Link
-              href="/services/holiday-packages"
-              onClick={closeMenu}
-              className="py-3 pl-3 rounded-lg hover:bg-blue-50"
-            >
-              Holiday Packages
-            </Link>
-
-            <Link
-              href="/services/flight-tickets"
-              onClick={closeMenu}
-              className="py-3 pl-3 rounded-lg hover:bg-blue-50"
-            >
-              Flight Tickets
-            </Link>
-
-            <Link
-              href="/services/visa-services"
-              onClick={closeMenu}
-              className="py-3 pl-3 rounded-lg hover:bg-blue-50"
-            >
-              Visa Services
-            </Link>
-
-            <Link
-              href="/about"
-              onClick={closeMenu}
-              className="py-4 border-b border-slate-100 mt-2"
-            >
-              About
-            </Link>
-
-            <Link
-              href="/contact"
-              onClick={closeMenu}
-              className="py-4 border-b border-slate-100"
-            >
-              Contact
-            </Link>
-
-            <a
-              href={siteConfig.social.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 text-center px-6 py-3 rounded-full font-semibold text-white"
-              style={{
-                background:
-                  "linear-gradient(135deg,#2B67FF,#05A7FF)",
-              }}
-            >
-              Enquire Now
-            </a>
-          </nav>
-        </aside>
+        </div>
       </div>
-    </>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl animate-slide-down">
+          <ul className="flex flex-col py-4 px-6 space-y-4">
+            {navLinks.map((link) => (
+              <li key={link.name}>
+                <Link href={link.href} className="block text-gray-800 font-medium hover:text-[var(--brand-blue)]">
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <button onClick={() => setServicesOpen(!servicesOpen)} className="flex items-center justify-between w-full text-gray-800 font-medium">
+                Services <ChevronDown className={`w-5 h-5 transition-transform ${servicesOpen ? "rotate-180" : ""}`} />
+              </button>
+              {servicesOpen && (
+                <ul className="mt-2 ml-4 space-y-2 border-l-2 border-gray-100 pl-4">
+                  <li><Link href="/services/holiday-packages" className="block text-gray-600 hover:text-[var(--primary-blue)]">Holiday Packages</Link></li>
+                  <li><Link href="/services/flight-tickets" className="block text-gray-600 hover:text-[var(--primary-blue)]">Flight Tickets</Link></li>
+                  <li><Link href="/services/visa-services" className="block text-gray-600 hover:text-[var(--primary-blue)]">Visa Services</Link></li>
+                </ul>
+              )}
+            </li>
+            <li className="pt-4 border-t border-gray-100">
+              <a href={siteConfig.social.whatsapp} className="flex items-center justify-center gap-2 w-full bg-[var(--primary-blue)] text-white px-4 py-3 rounded-md font-medium">
+                <FaWhatsapp className="w-5 h-5" /> Chat on WhatsApp
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
+    </nav>
   );
 }

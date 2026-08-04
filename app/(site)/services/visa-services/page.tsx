@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { ArrowRight } from "lucide-react";
 
 export default async function VisaServicesPage() {
+  const supabase = await createClient();
   const { data: visas, error } = await supabase
     .from("visa_services")
     .select("*")

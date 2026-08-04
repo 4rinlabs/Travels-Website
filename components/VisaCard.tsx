@@ -1,47 +1,53 @@
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { siteConfig } from "@/lib/site";
+import { FileText } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
-export default function VisaCard({
-  title,
-  image,
-  slug,
-}: {
+interface VisaCardProps {
   title: string;
   image: string;
   slug: string;
-}) {
+}
+
+export default function VisaCard({ title, image, slug }: VisaCardProps) {
+  const safeImage = image || "/placeholder-visa.jpg";
+  
   return (
-    <div className="group bg-white rounded-[var(--radius-card)] overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] hover:-translate-y-1 transition-all duration-300">
-      <div className="relative h-56 overflow-hidden">
+    <div className="group bg-white rounded-[var(--radius-card)] overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-all duration-300 border border-gray-100 flex flex-col h-full">
+      <div className="relative h-48 w-full overflow-hidden">
         <Image
-          src={image}
-          alt={title}
+          src={safeImage}
+          alt={`${title} Visa Services`}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold text-[var(--primary-blue)] flex items-center gap-1">
+          <FileText className="w-3 h-3" /> E-Visa
+        </div>
       </div>
-
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-[#00297A]">{title}</h3>
-
-        <div className="mt-5 flex gap-3">
-          <Link
+      
+      <div className="p-6 flex flex-col flex-grow">
+        <h3 className="text-xl font-bold text-gray-900 mb-4">{title} Visa</h3>
+        <p className="text-gray-600 text-sm mb-6 flex-grow">
+          Fast and reliable visa processing for {title}. Complete guidance from application to approval.
+        </p>
+        
+        <div className="flex items-center gap-3 mt-auto">
+          <Link 
             href={`/services/visa-services/${slug}`}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2B67FF] text-white text-sm font-semibold hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            className="flex-1 bg-gray-50 hover:bg-gray-100 text-[var(--primary-blue)] text-center py-2.5 rounded-lg font-medium text-sm transition-colors border border-gray-200"
           >
             View Details
-            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-
-          <a
-            href={`https://wa.me/919539430097?text=I want to know more about ${title}`}
+          <a 
+            href={siteConfig.social.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-5 py-2.5 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:border-slate-300 hover:bg-slate-50 transition-all duration-200"
+            className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white py-2.5 px-4 rounded-lg font-medium text-sm transition-colors shadow-sm"
           >
-            WhatsApp
+            <FaWhatsapp className="w-4 h-4" /> Apply
           </a>
         </div>
       </div>

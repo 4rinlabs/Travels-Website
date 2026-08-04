@@ -1,49 +1,43 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 
-export default function DeletePackageButton({
-  id,
-}: {
+interface DeletePackageButtonProps {
   id: string;
-}) {
+  title: string;
+}
+
+export default function DeletePackageButton({ id, title }: DeletePackageButtonProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const supabase = createClient();
 
-  async function handleDelete() {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this package?"
-    );
-
-    if (!confirmDelete) return;
-
-    setLoading(true);
-
-    const { error } = await supabase
-      .from("packages")
-      .delete()
-      .eq("id", id);
-
-    setLoading(false);
-
-    if (error) {
-      alert(error.message);
-      return;
+  const handleDelete = async () => {
+    if (window.confirm(`Are you sure you want to delete the package "${title}"? This action cannot be undone.`)) {
+      setIsDeleting(true);
+      const { error } = await supabase.from("packages").delete().eq("id", id);
+      
+      if (!error) {
+        router.refresh();
+      } else {
+        alert("Failed to delete package: " + error.message);
+        setIsDeleting(false);
+      }
     }
-
-    router.refresh();
-  }
+  };
 
   return (
     <button
       onClick={handleDelete}
-      disabled={loading}
-      className="p-2 rounded-full bg-red-50 hover:bg-red-100 transition disabled:opacity-60"
+      disabled={isDeleting}
+      className="text-red-600 hover:text-red-900 disabled:opacity-50 transition-colors"
+      title="Delete package"
     >
-      <Trash2 className="w-4 h-4 text-red-500" />
+      <Trash2 className="w-5 h-5" />
+      <span className="sr-only">Delete</span>
     </button>
   );
 }

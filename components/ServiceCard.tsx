@@ -1,45 +1,29 @@
 import Link from "next/link";
 import { LucideIcon, ArrowRight } from "lucide-react";
 
-type ServiceCardProps = {
+interface ServiceCardProps {
   title: string;
   description: string;
-  link: string;
   Icon: LucideIcon;
-};
+  href: string;
+}
 
-export default function ServiceCard({
-  title,
-  description,
-  link,
-  Icon,
-}: ServiceCardProps) {
+export default function ServiceCard({ title, description, Icon, href }: ServiceCardProps) {
   return (
-    <Link href={link}>
-      <div className="group bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-all duration-300 border border-slate-100 cursor-pointer hover:-translate-y-1">
-
-        <div
-          className="w-12 h-12 flex items-center justify-center rounded-xl mb-5"
-          style={{
-            background: "linear-gradient(135deg, #2B67FF, #05A7FF)",
-          }}
-        >
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-
-        <h3 className="text-xl font-bold text-[#00297A] mb-2 group-hover:text-[#2B67FF] transition-colors duration-200">
-          {title}
-        </h3>
-
-        <p className="text-slate-600 leading-relaxed mb-5">
-          {description}
-        </p>
-
-        <span className="inline-flex items-center gap-1.5 font-semibold text-[#2B67FF] text-sm group-hover:gap-2.5 transition-all duration-200">
-          Learn More
-          <ArrowRight className="w-4 h-4" />
-        </span>
+    <div className="bg-white rounded-[var(--radius-card)] p-8 shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-all duration-300 border border-gray-100 group">
+      <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:bg-[var(--primary-blue)] transition-colors duration-300">
+        <Icon className="w-7 h-7 text-[var(--brand-blue)] group-hover:text-white transition-colors duration-300" />
       </div>
-    </Link>
+      <h3 className="text-2xl font-bold text-gray-900 mb-4">{title}</h3>
+      <p className="text-gray-600 mb-8 leading-relaxed">
+        {description}
+      </p>
+      <Link 
+        href={href}
+        className="inline-flex items-center text-[var(--primary-blue)] font-semibold hover:text-[var(--brand-blue)] transition-colors"
+      >
+        Learn More <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+      </Link>
+    </div>
   );
 }

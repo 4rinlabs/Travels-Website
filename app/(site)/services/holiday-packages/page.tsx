@@ -1,13 +1,31 @@
 import Link from "next/link";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { ArrowRight } from "lucide-react";
 
 export default async function HolidayPackagesPage() {
-  const { data: packages } = await supabase
+  const supabase = await createClient();
+  const { data: packages, error } = await supabase
     .from("packages")
     .select("*")
     .order("created_at", { ascending: false });
+
+  if (error) {
+    return (
+      <div className="py-24 text-center text-red-600">
+        <h1 className="text-2xl font-bold mb-4">Error loading packages</h1>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
+  if (!packages || packages.length === 0) {
+    return (
+      <div className="py-24 text-center">
+        <h1 className="text-2xl font-bold mb-4">No Packages Found</h1>
+      </div>
+    );
+  }
 
   return (
     <>

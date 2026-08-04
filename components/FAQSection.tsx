@@ -1,76 +1,69 @@
 "use client";
-
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-const faqs = [
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+interface FAQSectionProps {
+  faqs?: FAQ[];
+}
+
+const defaultFaqs: FAQ[] = [
   {
-    question: "How do I book a package?",
-    answer: "You can contact us via WhatsApp or phone to book your package.",
+    question: "Do I need a visa to travel to Dubai?",
+    answer: "Most nationalities require a visa to enter the UAE. However, citizens of some countries can get a visa on arrival. Contact us with your nationality for specific requirements, and we can process your tourist visa quickly."
   },
   {
-    question: "Do you provide visa services?",
-    answer: "Yes, we provide visa assistance for multiple countries.",
+    question: "What is included in your holiday packages?",
+    answer: "Our standard holiday packages typically include flights, hotel accommodation, airport transfers, and daily breakfast. Many packages also include guided tours. We can customize any package based on your preferences."
   },
   {
-    question: "Are flights included?",
-    answer: "Flights can be included or booked separately.",
+    question: "How long does visa processing take?",
+    answer: "Processing times vary by destination. UAE tourist visas generally take 24-48 working hours. Schengen visas can take 2-4 weeks. We advise applying well in advance of your travel dates."
   },
+  {
+    question: "Can I book only flight tickets without a package?",
+    answer: "Yes, absolutely! We offer competitive rates for flight tickets to any destination globally, without requiring you to book a full holiday package."
+  }
 ];
 
-export default function FAQSection() {
-  const [open, setOpen] = useState<number | null>(null);
+export default function FAQSection({ faqs = defaultFaqs }: FAQSectionProps) {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const toggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   return (
-    <section className="max-w-3xl mx-auto px-6 py-24">
-      <div className="text-center mb-12">
-        <p className="section-label justify-center">Support</p>
-        <h2 className="text-3xl md:text-4xl font-bold text-[#00297A] mt-4">
-          Frequently Asked Questions
-        </h2>
-      </div>
-
-      <div className="space-y-3">
-        {faqs.map((faq, index) => {
-          const isOpen = open === index;
-          return (
-            <div
-              key={index}
-              className={`rounded-2xl border transition-all duration-200 ${
-                isOpen
-                  ? "border-[#2B67FF]/20 bg-blue-50/30 shadow-sm"
-                  : "border-slate-100 bg-white hover:border-slate-200"
-              }`}
+    <div className="space-y-4 w-full max-w-3xl mx-auto">
+      {faqs.map((faq, index) => {
+        const isOpen = openIndex === index;
+        return (
+          <div key={index} className="bg-white border border-gray-200 rounded-[var(--radius-card)] overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <button
+              className="w-full text-left px-6 py-5 flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)]"
+              onClick={() => toggle(index)}
+              aria-expanded={isOpen}
+              aria-controls={`faq-answer-${index}`}
             >
-              <button
-                onClick={() => setOpen(isOpen ? null : index)}
-                className="w-full flex items-center justify-between px-6 py-5 text-left"
-              >
-                <h3 className={`font-semibold pr-4 transition-colors ${
-                  isOpen ? "text-[#2B67FF]" : "text-slate-700"
-                }`}>
-                  {faq.question}
-                </h3>
-                <ChevronDown
-                  className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200 ${
-                    isOpen ? "rotate-180 text-[#2B67FF]" : ""
-                  }`}
-                />
-              </button>
-
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                }`}
-              >
-                <p className="px-6 pb-5 text-slate-600 leading-relaxed">
-                  {faq.answer}
-                </p>
-              </div>
+              <span className="font-semibold text-gray-900 text-lg pr-8">{faq.question}</span>
+              <ChevronDown className={`w-5 h-5 text-[var(--accent-blue)] shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+            </button>
+            <div 
+              id={`faq-answer-${index}`}
+              role="region"
+              className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-96 pb-5 opacity-100" : "max-h-0 opacity-0"}`}
+            >
+              <p className="text-gray-600 leading-relaxed pt-2 border-t border-gray-100">
+                {faq.answer}
+              </p>
             </div>
-          );
-        })}
-      </div>
-    </section>
+          </div>
+        );
+      })}
+    </div>
   );
 }

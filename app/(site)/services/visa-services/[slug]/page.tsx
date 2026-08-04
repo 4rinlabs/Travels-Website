@@ -3,7 +3,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { safeImage } from "@/lib/safeImage";
 import { Metadata } from "next";
 
@@ -18,6 +18,7 @@ type Props = {
 ---------------------------- */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const supabase = await createClient();
 
   const { data: visa } = await supabase
     .from("visa_services")
@@ -46,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 ---------------------------- */
 export default async function VisaDetailPage({ params }: Props) {
   const { slug } = await params;
+  const supabase = await createClient();
 
   const { data: visa } = await supabase
     .from("visa_services")

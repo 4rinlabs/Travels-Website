@@ -42,21 +42,21 @@ export default function ServicesPage() {
           <ServiceCard
             title="Holiday Packages"
             description="Customized travel packages for families, couples, and groups with the best destinations."
-            link="/services/holiday-packages"
+            href="/services/holiday-packages"
             Icon={Globe}
           />
 
           <ServiceCard
             title="Flight Tickets"
             description="Book affordable domestic and international flights with the best deals available."
-            link="/services/flight-tickets"
+            href="/services/flight-tickets"
             Icon={Plane}
           />
 
           <ServiceCard
             title="Visa Services"
             description="Get fast and hassle-free visa assistance for your international travel needs."
-            link="/services/visa-services"
+            href="/services/visa-services"
             Icon={FileText}
           />
         </div>
