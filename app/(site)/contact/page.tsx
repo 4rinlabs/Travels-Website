@@ -1,7 +1,7 @@
 import { Phone, Mail, MapPin, Clock3, MessageCircle } from "lucide-react";
 
 export default function ContactPage() {
-  const whatsappNumber = "919539430097";
+  const whatsappNumber = "+91 9539430097";
 
   const message = "Hi, I would like to know more about your travel services";
 
@@ -73,7 +73,7 @@ export default function ContactPage() {
                 <div>
                   <p className="text-xs text-slate-400 mb-0.5">Email</p>
                   <p className="text-base font-medium text-slate-700">
-                    info@eazyflytravels.com
+                    eazyfly.tours@gmail.com
                   </p>
                 </div>
               </div>

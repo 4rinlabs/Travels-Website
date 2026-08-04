@@ -100,8 +100,8 @@ export default function Hero() {
                   rel="noopener noreferrer"
                   className="group flex flex-col md:flex-row items-center gap-1 md:gap-3 px-1 md:px-6 py-2 rounded-xl md:rounded-full hover:bg-white/20 transition-all cursor-pointer text-white justify-center border border-transparent hover:border-white/10 text-center"
                 >
-                  <action.icon className="w-4 h-4 md:w-6 md:h-6 text-blue-200 group-hover:text-white group-hover:scale-110 transition-transform duration-300" />
-                  <span className="font-semibold text-[10px] md:text-sm">{action.title}</span>
+                  <action.icon className="w-6 h-6 md:w-6 md:h-6 text-blue-200 group-hover:text-white group-hover:scale-110 transition-transform duration-300" />
+                  <span className="font-semibold text-xs md:text-sm mt-1 md:mt-0">{action.title}</span>
                 </a>
               ) : (
                 <Link 
@@ -109,8 +109,8 @@ export default function Hero() {
                   href={action.href}
                   className="group flex flex-col md:flex-row items-center gap-1 md:gap-3 px-1 md:px-6 py-2 rounded-xl md:rounded-full hover:bg-white/20 transition-all cursor-pointer text-white justify-center border border-transparent hover:border-white/10 text-center"
                 >
-                  <action.icon className="w-4 h-4 md:w-6 md:h-6 text-blue-200 group-hover:text-white group-hover:scale-110 transition-transform duration-300" />
-                  <span className="font-semibold text-[10px] md:text-sm">{action.title}</span>
+                  <action.icon className="w-6 h-6 md:w-6 md:h-6 text-blue-200 group-hover:text-white group-hover:scale-110 transition-transform duration-300" />
+                  <span className="font-semibold text-xs md:text-sm mt-1 md:mt-0">{action.title}</span>
                 </Link>
               )
             ))}

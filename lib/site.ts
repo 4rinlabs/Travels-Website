@@ -1,7 +1,7 @@
 export const siteConfig = {
   companyName: "EazyFly Travels",
-  phone: "9539430097",
-  whatsappNumber: "919539430097",
+  phone: "+91 9539430097",
+  whatsappNumber: "+91 9539430097",
   email: "info@eazyflytravels.com",
   address: "The Edge Offices, A17, Vidya Nagar, Kasaragod, Kerala 671123.",
   social: {

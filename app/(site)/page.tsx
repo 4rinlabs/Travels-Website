@@ -88,7 +88,7 @@ export default async function HomePage() {
               </p>
               
               <ul className="space-y-4 mb-10">
-                {["Lowest price guarantee", "24/7 customer support", "Flexible booking options", "Instant ticketing assistance"].map((feature, i) => (
+                {["Best price guaranteed", "24/7 customer support", "Flexible booking options", "Instant ticketing assistance"].map((feature, i) => (
                   <li key={i} className="flex items-center gap-3 text-gray-700 font-medium">
                     <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[var(--brand-blue)]">
                       <Plane className="w-4 h-4" />

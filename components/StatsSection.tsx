@@ -1,3 +1,68 @@
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+
+function AnimatedCounter({ value, duration = 2000 }: { value: string; duration?: number }) {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  // Extract the numeric part and the suffix
+  const numMatch = value.match(/\d+/);
+  const targetNumber = numMatch ? parseInt(numMatch[0], 10) : 0;
+  const suffix = value.replace(/\d+/g, "");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+
+    const updateCount = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      
+      if (progress < duration) {
+        const percentage = progress / duration;
+        const easedProgress = easeOutQuart(percentage);
+        setCount(Math.floor(targetNumber * easedProgress));
+        animationFrameId = requestAnimationFrame(updateCount);
+      } else {
+        setCount(targetNumber);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(updateCount);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isVisible, targetNumber, duration]);
+
+  return (
+    <div ref={elementRef} className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+      {count}{suffix}
+    </div>
+  );
+}
+
 export default function StatsSection() {
   const stats = [
     { value: "20+", label: "Destinations" },
@@ -15,9 +80,7 @@ export default function StatsSection() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-white/20">
           {stats.map((stat, i) => (
             <div key={i} className={`text-center ${i === 0 ? "" : "pl-8 md:pl-12"}`}>
-              <div className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">
-                {stat.value}
-              </div>
+              <AnimatedCounter value={stat.value} />
               <div className="text-sm md:text-base text-blue-100 font-medium uppercase tracking-wider">
                 {stat.label}
               </div>
