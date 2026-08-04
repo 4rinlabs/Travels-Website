@@ -14,7 +14,7 @@ export default function WhatsAppButton() {
 
   return (
     <a
-      href={siteConfig.social.whatsapp}
+      href={`https://wa.me/${siteConfig.whatsappNumber}?text=Hi, I'd like to know more about your travel services.`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"

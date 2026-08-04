@@ -21,7 +21,7 @@ export default function FlightTicketsClient() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const message = `Hi EazyFly! I'd like to book a flight ticket.%0A%0A*From:* ${formData.from}%0A*To:* ${formData.to}%0A*Date:* ${formData.date}%0A*Passengers:* ${formData.passengers}%0A*Type:* ${formData.tripType}`;
+    const message = `Hi EazyFly! I'd like to book a flight ticket.%0A%0A*From:* ${formData.from}%0A*To:* ${formData.to}%0A%0A*Date:* ${formData.date}%0A*Passengers:* ${formData.passengers}%0A*Type:* ${formData.tripType}`;
     window.open(`https://wa.me/${siteConfig.whatsappNumber}?text=${message}`, "_blank");
   };
 

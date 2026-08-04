@@ -8,9 +8,9 @@ function AnimatedCounter({ value, duration = 2000 }: { value: string; duration?:
   const elementRef = useRef<HTMLDivElement>(null);
 
   // Extract the numeric part and the suffix
-  const numMatch = value.match(/\d+/);
+  const numMatch = value.match(/^\d+/);
   const targetNumber = numMatch ? parseInt(numMatch[0], 10) : 0;
-  const suffix = value.replace(/\d+/g, "");
+  const suffix = value.replace(/^\d+/, "");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -77,9 +77,9 @@ export default function StatsSection() {
       <div className="absolute inset-0 opacity-10" style={{ background: "radial-gradient(circle at 50% 50%, var(--light-accent) 0%, transparent 50%)" }} />
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-white/20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {stats.map((stat, i) => (
-            <div key={i} className={`text-center ${i === 0 ? "" : "pl-8 md:pl-12"}`}>
+            <div key={i} className="text-center">
               <AnimatedCounter value={stat.value} />
               <div className="text-sm md:text-base text-blue-100 font-medium uppercase tracking-wider">
                 {stat.label}

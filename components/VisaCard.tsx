@@ -42,7 +42,7 @@ export default function VisaCard({ title, image, slug }: VisaCardProps) {
             View Details
           </Link>
           <a 
-            href={siteConfig.social.whatsapp}
+            href={`https://wa.me/${siteConfig.whatsappNumber}?text=Hi, I would like to apply for a ${title} Visa.`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white py-2.5 px-4 rounded-lg font-medium text-sm transition-colors shadow-sm"

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
-import { Globe, Camera, Video, MapPin, Phone, Mail } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -17,14 +17,11 @@ export default function Footer() {
               Your trusted partner for memorable journeys. We provide comprehensive travel solutions including bespoke holiday packages, flight bookings, and reliable visa services.
             </p>
             <div className="flex items-center space-x-4">
-              <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[var(--brand-blue)] hover:text-white transition-colors" aria-label="Instagram">
-                <Camera className="w-5 h-5" />
+              <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-500 hover:text-white transition-colors" aria-label="Instagram">
+                <FaInstagram className="w-5 h-5" />
               </a>
-              <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[var(--brand-blue)] hover:text-white transition-colors" aria-label="Facebook">
-                <Globe className="w-5 h-5" />
-              </a>
-              <a href={siteConfig.social.youtube} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[var(--brand-blue)] hover:text-white transition-colors" aria-label="Youtube">
-                <Video className="w-5 h-5" />
+              <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-[#1877F2] hover:text-white transition-colors" aria-label="Facebook">
+                <FaFacebook className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -35,7 +32,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li><Link href="/" className="hover:text-[var(--accent-blue)] transition-colors">Home</Link></li>
               <li><Link href="/about" className="hover:text-[var(--accent-blue)] transition-colors">About Us</Link></li>
-              <li><Link href="/destinations" className="hover:text-[var(--accent-blue)] transition-colors">Destinations</Link></li>
+              <li><Link href="/services/holiday-packages" className="hover:text-[var(--accent-blue)] transition-colors">Destinations</Link></li>
               <li><Link href="/blog" className="hover:text-[var(--accent-blue)] transition-colors">Blog</Link></li>
               <li><Link href="/contact" className="hover:text-[var(--accent-blue)] transition-colors">Contact</Link></li>
             </ul>

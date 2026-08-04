@@ -1,4 +1,5 @@
-import { Phone, Mail, MapPin, Clock3, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Clock3 } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function ContactPage() {
   const whatsappNumber = "+91 9539430097";
@@ -125,7 +126,7 @@ export default function ContactPage() {
                 background: "linear-gradient(135deg, #2B67FF, #05A7FF)",
               }}
             >
-              <MessageCircle className="w-5 h-5" />
+              <FaWhatsapp className="w-5 h-5 text-white" />
               Chat on WhatsApp
             </a>
           </div>
