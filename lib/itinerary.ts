@@ -1,4 +1,4 @@
-import { ItineraryDay } from "./types";
+import type { ItineraryDay } from "./types";
 
 /**
  * Normalizes any itinerary data (legacy string array, mixed, or missing fields)
