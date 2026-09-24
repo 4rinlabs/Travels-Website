@@ -8,22 +8,27 @@ import DynamicListInput from "./DynamicListInput";
 import ImageUpload from "./ImageUpload";
 import ImageGalleryUpload from "./ImageGalleryUpload";
 import ItineraryEditor from "./ItineraryEditor";
+import { normalizeItinerary } from "@/lib/itinerary";
 
 export default function PackageForm({ initialData }: PackageFormProps) {
-  const [formData, setFormData] = useState<Partial<Package>>(
-    initialData || {
+  const [formData, setFormData] = useState<Partial<Package>>(() => {
+    const base = initialData || {
       title: "",
       slug: "",
       duration: "",
       price: "",
       overview: "",
       image: "",
-      itinerary: [""],
+      itinerary: [],
       inclusions: [],
       exclusions: [],
       gallery: []
-    }
-  );
+    };
+    return {
+      ...base,
+      itinerary: normalizeItinerary(base.itinerary)
+    };
+  });
   
   const parsedDays = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(D|Day)/i)?.[1] || "0") : 0;
   const parsedNights = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(N|Night)/i)?.[1] || "0") : 0;
@@ -52,10 +57,12 @@ export default function PackageForm({ initialData }: PackageFormProps) {
     setLoading(true);
     setError(null);
 
+    const cleanedItinerary = normalizeItinerary(formData.itinerary);
+
     const payload = {
       ...formData,
       duration: `${durationDays} Days / ${durationNights} Nights`,
-      itinerary: formData.itinerary || [],
+      itinerary: cleanedItinerary,
       inclusions: formData.inclusions || [],
       exclusions: formData.exclusions || [],
       gallery: formData.gallery || []

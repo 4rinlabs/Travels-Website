@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Plus, X, UploadCloud, Link as LinkIcon, Loader2 } from "lucide-react";
+import { Plus, X, UploadCloud, Link as LinkIcon, Loader2, ArrowLeft, ArrowRight } from "lucide-react";
 
 interface Props {
   label: string;
@@ -29,6 +29,14 @@ export default function ImageGalleryUpload({ label, items, onChange, bucketName 
   const handleRemove = (index: number) => {
     const newItems = [...items];
     newItems.splice(index, 1);
+    onChange(newItems);
+  };
+
+  const handleMove = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= items.length) return;
+    const newItems = [...items];
+    const [moved] = newItems.splice(fromIndex, 1);
+    newItems.splice(toIndex, 0, moved);
     onChange(newItems);
   };
 
@@ -157,11 +165,31 @@ export default function ImageGalleryUpload({ label, items, onChange, bucketName 
               <button
                 type="button"
                 onClick={() => handleRemove(idx)}
-                className="absolute top-1 right-1 bg-white/80 hover:bg-white text-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-white/80 hover:bg-white text-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
                 title="Remove image"
               >
                 <X className="w-4 h-4" />
               </button>
+              <div className="absolute bottom-1 left-1 right-1 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <button
+                  type="button"
+                  onClick={() => handleMove(idx, idx - 1)}
+                  disabled={idx === 0}
+                  className="bg-black/60 hover:bg-black/80 text-white p-1 rounded disabled:opacity-20"
+                  title="Move Left"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleMove(idx, idx + 1)}
+                  disabled={idx === items.length - 1}
+                  className="bg-black/60 hover:bg-black/80 text-white p-1 rounded disabled:opacity-20"
+                  title="Move Right"
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           ))}
         </div>

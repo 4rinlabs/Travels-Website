@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ItineraryDay } from "@/lib/types";
+import { normalizeItinerary } from "@/lib/itinerary";
 import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, ArrowUp, ArrowDown } from "lucide-react";
 import DynamicListInput from "./DynamicListInput";
 import ImageGalleryUpload from "./ImageGalleryUpload";
@@ -12,20 +13,8 @@ interface Props {
 }
 
 export default function ItineraryEditor({ items, onChange }: Props) {
-  // Normalize items on load
-  const normalizedItems: ItineraryDay[] = (items || []).map((item, idx) => {
-    if (typeof item === "string") {
-      return {
-        id: `day-${Date.now()}-${idx}`,
-        title: "",
-        description: item,
-        activities: [],
-        images: [],
-        note: ""
-      };
-    }
-    return { ...item, id: item.id || `day-${Date.now()}-${idx}` };
-  });
+  // Normalize items safely with stable IDs
+  const normalizedItems: ItineraryDay[] = normalizeItinerary(items);
 
   const [expandedDayId, setExpandedDayId] = useState<string | null>(
     normalizedItems.length > 0 ? normalizedItems[0].id || null : null
@@ -39,7 +28,7 @@ export default function ItineraryEditor({ items, onChange }: Props) {
 
   const handleAddDay = () => {
     const newDay: ItineraryDay = {
-      id: `day-${Date.now()}`,
+      id: `day-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       title: "",
       description: "",
       activities: [],
