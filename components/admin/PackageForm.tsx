@@ -24,7 +24,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
     }
   );
   
-  const [itineraryDays, setItineraryDays] = useState(initialData?.itinerary?.length || 1);
+  const [itineraryDays, setItineraryDays] = useState<number | string>(initialData?.itinerary?.length || 1);
   
   const parsedDays = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(D|Day)/i)?.[1] || "0") : 0;
   const parsedNights = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(N|Night)/i)?.[1] || "0") : 0;
@@ -42,9 +42,18 @@ export default function PackageForm({ initialData }: PackageFormProps) {
   };
 
   const handleItineraryDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const days = parseInt(e.target.value) || 1;
+    const val = e.target.value;
+    if (val === "") {
+      setItineraryDays("");
+      return;
+    }
+    
+    const days = parseInt(val, 10);
+    if (isNaN(days)) return;
+    
+    setItineraryDays(days);
+    
     const maxDays = Math.min(Math.max(days, 1), 30); // limit 1-30
-    setItineraryDays(maxDays);
     
     const currentItinerary = formData.itinerary || [];
     const newItinerary = [...currentItinerary];
@@ -205,7 +214,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             label="Main Image"
             value={formData.image || ""}
             onChange={(url) => setFormData({ ...formData, image: url })}
-            bucketName="images"
+            bucketName="packages"
           />
         </div>
       </div>
@@ -274,7 +283,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
           label="Gallery Images"
           items={formData.gallery || []}
           onChange={(items) => setFormData({ ...formData, gallery: items })}
-          bucketName="images"
+          bucketName="packages"
         />
       </div>
 
