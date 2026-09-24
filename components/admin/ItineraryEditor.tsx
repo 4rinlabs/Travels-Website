@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ItineraryDay } from "@/lib/types";
 import { normalizeItinerary } from "@/lib/itinerary";
-import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, ArrowUp, ArrowDown } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2, Plus, ArrowUp, ArrowDown, CalendarDays } from "lucide-react";
 import DynamicListInput from "./DynamicListInput";
 import ImageGalleryUpload from "./ImageGalleryUpload";
 
@@ -180,6 +180,16 @@ export default function ItineraryEditor({ items, onChange }: Props) {
           </div>
         );
       })}
+
+      {normalizedItems.length === 0 && (
+        <div className="p-8 text-center bg-gray-50 border border-dashed border-gray-300 rounded-xl space-y-2">
+          <CalendarDays className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+          <h4 className="font-semibold text-gray-800 text-base">No itinerary days added yet</h4>
+          <p className="text-sm text-gray-500 max-w-md mx-auto">
+            Build your package itinerary day by day with activities, photos, and notes.
+          </p>
+        </div>
+      )}
 
       <button
         type="button"
