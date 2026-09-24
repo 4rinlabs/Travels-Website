@@ -1,5 +1,14 @@
 // ——— Database Models ———
 
+export interface ItineraryDay {
+  id?: string;
+  title: string;
+  description: string;
+  activities: string[];
+  images: string[];
+  note?: string;
+}
+
 export interface Package {
   id: string;
   slug: string;
@@ -8,7 +17,7 @@ export interface Package {
   duration: string | null;
   price: string | null;
   overview: string | null;
-  itinerary: string[];
+  itinerary: (string | ItineraryDay)[];
   inclusions: string[];
   exclusions: string[];
   gallery: string[];

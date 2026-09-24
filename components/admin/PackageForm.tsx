@@ -7,6 +7,7 @@ import { Package, PackageFormProps } from "@/lib/types";
 import DynamicListInput from "./DynamicListInput";
 import ImageUpload from "./ImageUpload";
 import ImageGalleryUpload from "./ImageGalleryUpload";
+import ItineraryEditor from "./ItineraryEditor";
 
 export default function PackageForm({ initialData }: PackageFormProps) {
   const [formData, setFormData] = useState<Partial<Package>>(
@@ -24,8 +25,6 @@ export default function PackageForm({ initialData }: PackageFormProps) {
     }
   );
   
-  const [itineraryDays, setItineraryDays] = useState<number | string>(initialData?.itinerary?.length || 1);
-  
   const parsedDays = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(D|Day)/i)?.[1] || "0") : 0;
   const parsedNights = initialData?.duration ? parseInt(initialData.duration.match(/(\d+)\s*(N|Night)/i)?.[1] || "0") : 0;
   
@@ -39,38 +38,6 @@ export default function PackageForm({ initialData }: PackageFormProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleItineraryDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    if (val === "") {
-      setItineraryDays("");
-      return;
-    }
-    
-    const days = parseInt(val, 10);
-    if (isNaN(days)) return;
-    
-    setItineraryDays(days);
-    
-    const maxDays = Math.min(Math.max(days, 1), 30); // limit 1-30
-    
-    const currentItinerary = formData.itinerary || [];
-    const newItinerary = [...currentItinerary];
-    if (maxDays > currentItinerary.length) {
-      for (let i = currentItinerary.length; i < maxDays; i++) {
-        newItinerary.push("");
-      }
-    } else {
-      newItinerary.splice(maxDays);
-    }
-    setFormData({ ...formData, itinerary: newItinerary });
-  };
-
-  const handleItineraryChange = (index: number, value: string) => {
-    const newItinerary = [...(formData.itinerary || [])];
-    newItinerary[index] = value;
-    setFormData({ ...formData, itinerary: newItinerary });
   };
 
   const handleSlugify = () => {
@@ -234,33 +201,10 @@ export default function PackageForm({ initialData }: PackageFormProps) {
 
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Itinerary</h3>
-        <div className="mb-4">
-          <label htmlFor="itineraryDays" className="block text-sm font-medium text-gray-700 mb-1">Number of Days</label>
-          <input
-            id="itineraryDays"
-            type="number"
-            min="1"
-            max="30"
-            value={itineraryDays}
-            onChange={handleItineraryDaysChange}
-            className="w-32 px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
-          />
-        </div>
-        
-        <div className="space-y-4">
-          {(formData.itinerary || []).map((dayDesc, idx) => (
-            <div key={idx} className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Day {idx + 1}</label>
-              <textarea
-                rows={3}
-                value={dayDesc}
-                onChange={(e) => handleItineraryChange(idx, e.target.value)}
-                placeholder={`Description for Day ${idx + 1}...`}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500"
-              />
-            </div>
-          ))}
-        </div>
+        <ItineraryEditor
+          items={formData.itinerary || []}
+          onChange={(items) => setFormData({ ...formData, itinerary: items })}
+        />
       </div>
 
       <div className="border-t border-gray-200 pt-6 grid grid-cols-1 md:grid-cols-2 gap-8">

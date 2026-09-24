@@ -5,6 +5,7 @@ import { siteConfig } from "@/lib/site";
 import type { Package } from "@/lib/types";
 import { Clock, CheckCircle2, Info, X, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import PackageItinerary from "./PackageItinerary";
 
 interface Props {
   pkg: Package;
@@ -71,19 +72,7 @@ export default function PackageDetailClient({ pkg }: Props) {
             </section>
 
             {pkg.itinerary && pkg.itinerary.length > 0 && (
-              <section>
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">Itinerary</h2>
-                <div className="space-y-6">
-                  {pkg.itinerary.map((dayDesc, idx) => (
-                    <div key={idx} className="bg-gray-50 rounded-2xl p-6 border border-gray-100 relative pl-12 md:pl-16">
-                      <div className="absolute left-4 top-6 bottom-6 w-0.5 bg-gray-200"></div>
-                      <div className="absolute left-[11px] top-6 w-3 h-3 rounded-full bg-[var(--primary-blue)] ring-4 ring-gray-50"></div>
-                      <h4 className="text-xl font-bold text-gray-900 mb-2">Day {idx + 1}</h4>
-                      <p className="text-gray-600 leading-relaxed">{dayDesc}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
+              <PackageItinerary itinerary={pkg.itinerary} title={pkg.title} />
             )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
