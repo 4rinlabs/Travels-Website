@@ -1,17 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Star, Plane, Map, FileText } from "lucide-react";
+import { Star, Plane, Map, FileText } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { siteConfig } from "@/lib/site";
-
-const slides = [
-  { image: "/hero2.jpg", title: "Unforgettable Journeys", highlight: "Await You", subtitle: "Discover handpicked travel experiences crafted for comfort and adventure." },
-  { image: "/hero3.jpg", title: "Your Dream Vacation", highlight: "Starts Here", subtitle: "From stunning beaches to majestic mountains — we have it all." },
-  { image: "/hero4.jpg", title: "Fly with", highlight: "Confidence", subtitle: "Best flight deals, visa support, and complete travel assistance." },
-  { image: "/hero5.jpg", title: "Explore the World with", highlight: "EazyFly", subtitle: "Affordable packages to the most popular destinations worldwide." },
-];
 
 const quickActions = [
   { title: "Book Flights", icon: Plane, href: "/services/flight-tickets" },
@@ -21,68 +14,47 @@ const quickActions = [
 ];
 
 export default function Hero() {
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
-
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const nextSlide = () => setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  const prevSlide = () => setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-
   return (
     <section className="relative h-screen min-h-[750px] flex flex-col justify-center items-center overflow-hidden bg-black">
-      {/* Dynamic Backgrounds */}
-      {slides.map((slide, index) => (
-        <div 
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${index === current ? "opacity-100 z-0" : "opacity-0 z-0"}`}
-        >
-          {/* Subtle Overlay to let the image shine */}
-          <div className="absolute inset-0 bg-black/40 z-10" />
-          <Image
-            src={slide.image}
-            alt={slide.title}
-            fill
-            priority={index === 0}
-            sizes="100vw"
-            className={`object-cover ${index === current ? "animate-kenburns" : ""}`}
-          />
-        </div>
-      ))}
+      {/* Nature Background Image (Option 2: Alpine Peaks & Mirror Lake) */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-black/40 z-10" />
+        <Image
+          src="/hero-nature.jpg"
+          alt="EazyFly Travels - Majestic Nature Landscape"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover animate-kenburns"
+        />
+      </div>
 
       {/* Main Content */}
       <div className="relative z-20 container mx-auto px-4 flex flex-col items-center text-center mt-[-4rem]">
         
-        {/* Trust Badge */}
-        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 animate-fade-in-up shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
-          <div className="flex text-yellow-400">
+        {/* Trust Badge - Clean, transparent background removed */}
+        <div className="inline-flex items-center gap-2.5 mb-6 animate-fade-in-up">
+          <div className="flex text-yellow-400 drop-shadow">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-current" />
+              <Star key={i} className="w-5 h-5 fill-current" />
             ))}
           </div>
-          <span className="text-white text-sm md:text-base font-medium tracking-wide">
-            5.0 Rated on Google | 1000+ Happy Travelers
+          <span className="text-white text-base md:text-lg font-semibold tracking-wide drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+            5.0 Rated on Google
           </span>
         </div>
 
         {/* Headline */}
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight animate-fade-in-up drop-shadow-2xl" style={{ animationDelay: "0.1s" }}>
-          {slides[current].title} <br />
+          Unforgettable Journeys <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-sky-100 drop-shadow-lg">
-            {slides[current].highlight}
+            Await You
           </span>
         </h1>
         
         {/* Subtitle */}
         <p className="text-lg md:text-2xl text-gray-100 mb-12 max-w-3xl animate-fade-in-up font-light drop-shadow-md" style={{ animationDelay: "0.2s" }}>
-          {slides[current].subtitle}
+          Discover handpicked travel experiences crafted for comfort, wonder, and adventure.
         </p>
         
       </div>
@@ -116,26 +88,6 @@ export default function Hero() {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Slider Controls (Hidden on mobile for cleaner look) */}
-      <button onClick={prevSlide} aria-label="Previous slide" className="absolute left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors backdrop-blur-md border border-white/20 hidden md:block group">
-        <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
-      </button>
-      <button onClick={nextSlide} aria-label="Next slide" className="absolute right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors backdrop-blur-md border border-white/20 hidden md:block group">
-        <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
-      </button>
-
-      {/* Dots Indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrent(index)}
-            aria-label={`Go to slide ${index + 1}`}
-            className={`h-2 rounded-full transition-all duration-300 ${index === current ? "bg-white w-8" : "bg-white/40 w-2 hover:bg-white/70"}`}
-          />
-        ))}
       </div>
     </section>
   );
